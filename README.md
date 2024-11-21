@@ -1,3 +1,5 @@
+[Документация (кликабельно)](https://docs.google.com/document/d/1ch9BcaLySKfxzHig2z-38Je2vmDPjXLDR3TZSelU1DA/edit?usp=sharing)
+
 # Проектная работа "Веб-ларек"
 
 Стек: HTML, SCSS, TS, Webpack
