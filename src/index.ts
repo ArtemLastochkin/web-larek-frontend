@@ -128,6 +128,7 @@ class CardView {
     })
     console.log(arr.forEach((e)=>{
       document.querySelector(`.gallery`).append(e)
+      e.addEventListener(`click`, (evt)=>{console.log(evt.target);})
     }));
   }
 

@@ -1,11 +1,11 @@
-// type Card = {
-// 	id: string;
-// 	description: string;
-// 	image: string;
-// 	title: string;
-// 	category: string;
-// 	price: number | null;
-// };
+type Card = {
+	id: string;
+	description: string;
+	image: string;
+	title: string;
+	category: string;
+	price: number | null;
+};
 
 // interface ICard extends Card {
 // 	cards: Card[];
