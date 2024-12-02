@@ -8,17 +8,19 @@ interface IPopupPreviewCard extends ICardUI {
 	description: string;
 }
 
-export class PopupPreviewCardUI extends CardUI implements IPopupPreviewCard {
+export class CardFullUI extends CardUI implements IPopupPreviewCard {
 	protected textElement: HTMLParagraphElement;
 	protected buttonInBasketElement: HTMLButtonElement;
 
-	constructor(container: HTMLTemplateElement, events: IEvents, objCard: Card) {
-		super(container, events, objCard)
+	constructor(container: HTMLTemplateElement, events: IEvents, id: string, eventName: string) {
+		super(container, events, id)
 		this.textElement = ensureElement(settings.textSelector, this.container) as HTMLParagraphElement
 		this.buttonInBasketElement = ensureElement(settings.buttonSelector, this.container) as HTMLButtonElement
-		// this.buttonInBasketElement.addEventListener(`click`, () => {
-		// 	events.emit(`card:clickAddBasket`, objCard)
-		// })
+
+		if (eventName === `card:clickAddBasket`) {
+			this.buttonInBasketElement.addEventListener(`click`, () => {
+			events.emit(eventName, {id})
+		})}
 	}
 
 	set description(value: string) {
