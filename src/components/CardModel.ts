@@ -1,13 +1,6 @@
-import { Card } from '../types';
+import { Card, ICard } from '../types';
 import { ApiListResponse } from './base/api';
-import { EventEmitter, IEvents } from './base/events';
-
-interface ICard {
-	total: number;
-	cards: Card[];
-	getDataCard(id: string): Card;
-	setData(res: ApiListResponse<Card>): void;
-}
+import { IEvents } from './base/events';
 
 export class CardModel implements ICard {
 	total: number;
@@ -21,6 +14,12 @@ export class CardModel implements ICard {
 
 	getDataCard(id: string): Card {
 		return this.cards.filter((e: Card) => e.id === id)[0];
+	}
+
+	getDataCardToBasket(id: string): Partial<Card> {
+		const cardObj = this.cards.filter((e: Card) => e.id === id)[0];
+		const newCardObj = {title: cardObj.title, price: cardObj.price}
+		return newCardObj
 	}
 
 	setData(res: ApiListResponse<Card>) {

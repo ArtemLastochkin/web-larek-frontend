@@ -1,42 +1,25 @@
-import { Card, ICardUI } from '../types';
+import { Card, ICard } from '../types';
 import { CDN_URL, settings } from '../utils/constants';
 import { ensureElement } from '../utils/utils';
 import { Component } from './base/Component';
 import { IEvents } from './base/events';
 
-export class CardUI extends Component<Card> implements ICardUI {
+export class CardUI extends Component<Card> {
 	protected categoryElement: HTMLSpanElement;
 	protected titleElement: HTMLElement;
 	protected imageElement: HTMLImageElement;
 	protected priceElement: HTMLSpanElement;
+	protected descriptionElement: HTMLParagraphElement;
 
-	constructor(
-		container: HTMLElement,
-		events: IEvents,
-		id: string,
-		eventName?: string,
-	) {
+	constructor(container: HTMLElement) {
 		super(container);
-		this.categoryElement = ensureElement(
-			settings.categorySelector,
-			this.container
-		);
 		this.titleElement = ensureElement(settings.titleSelector, this.container);
-		this.imageElement = ensureElement(
-			settings.imageSelector,
-			this.container
-		) as HTMLImageElement;
 		this.priceElement = ensureElement(settings.priceSelector, this.container);
-
-		if (eventName === `card:click`) {
-			this.container.addEventListener(`click`, () => {
-				events.emit(eventName, {id});
-			});
-		}
 	}
 
 	set category(value: string) {
 		this.setText(this.categoryElement, value);
+		if (this.categoryElement !== undefined) {
 		super.toggleClass(
 			this.categoryElement,
 			`card__category_soft`,
@@ -61,7 +44,7 @@ export class CardUI extends Component<Card> implements ICardUI {
 			this.categoryElement,
 			`card__category_additional`,
 			value === `дополнительное`
-		);
+		);}
 	}
 
 	set title(value: string) {
@@ -74,5 +57,9 @@ export class CardUI extends Component<Card> implements ICardUI {
 
 	set price(value: string) {
 		this.setText(this.priceElement, Number(value) + ` синапсов`);
+	}
+
+	set description(value: string) {
+		this.setText(this.descriptionElement, value);
 	}
 }

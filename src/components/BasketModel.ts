@@ -1,33 +1,46 @@
-import { Card } from "../types";
-import { IEvents } from "./base/events";
+import { Card, IBasketModel } from '../types';
+import { IEvents } from './base/events';
 
-
-export class BasketModel {
+export class BasketModel implements IBasketModel {
 	protected cardList: Card[] = [];
+	protected cardElements: HTMLElement[] = [];
 
 	constructor(protected events: IEvents) {}
 
-	addProduct(obj: Card): void {
-		this.cardList.push(obj)
-		const id = obj.id
-		this.events.emit(`basket:changeProductList`)
+	setElements(value: HTMLElement[]) {
+		this.cardElements = value;
 	}
 
-	delProduct(id: string) {	
+	addProduct(obj: Card): void {
+		if (!this.cardList.includes(obj)) {
+			this.cardList.push(obj);
+		}
+		this.events.emit(`basket:changeList`);
+	}
+
+	delProduct(id: string) {
 		this.cardList = this.cardList.filter((number) => number.id !== id);
-		this.events.emit(`basket:changeProductList`)
+		this.events.emit(`basket:changeList`);
 	}
 
 	getProductList(): Card[] {
-		return this.cardList
+		return this.cardList;
 	}
 
-	get total(): number {
-		return this.cardList.reduce((acc: number, element: Card) => acc + element.price, 0);
+	get total(): string {
+		return String(
+			this.cardList.reduce(
+				(acc: number, element: Card) => acc + element.price,
+				0
+			)
+		);
 	}
 
-	get totalItems(): number {
-		return this.cardList.length
+	get totalItems(): string {
+		return String(this.cardList.length);
 	}
 
+	get elements(): HTMLElement[] {
+		return this.cardElements;
+	}
 }

@@ -2,8 +2,10 @@ export const API_URL = `${process.env.API_ORIGIN}/api/weblarek`;
 export const CDN_URL = `${process.env.API_ORIGIN}/content/weblarek`;
 
 export const settings = {
+  page: `.page`,
   productApi: `/product`,
   mainGallery: `.gallery`,
+  galleryItem: `.gallery__item`,
   modalContainer: `#modal-container`,
   modal: `.modal`,
   modalContainerClass: `.modal__container`,
@@ -19,6 +21,7 @@ export const settings = {
   basketItemIndex: `.basket__item-index`,
   basketPrice: `.basket__price`,
   basketItemDelete: `.basket__item-delete`,
+  basketButton: `.basket__button`,
   templateCard: `#card-catalog`,
   categorySelector: `.card__category`,
   titleSelector: `.card__title`,
@@ -31,7 +34,17 @@ export const settings = {
   templateCardBasket: `#card-basket`,
   templateBasket: `#basket`,
   templateOrder: `#order`,
-  templateContacts: `#contacts`
+  templateContacts: `#contacts`,
+  // modalContainerSuccess: `#modal-container-success`,
+  // modalContainerContact: `#modal-container-contact`,
+  // modalContainerPayment: `#modal-container-payment`,
+  // modalContainerBasket: `#modal-container-basket`,
+  // modalContainerPreview: `#modal-container-preview`,
+  // view: {
+  //   gallery: `gallery`, 
+  //   preview: `preview`, 
+  //   basket: `basket`
+  // },
 };
 
 

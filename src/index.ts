@@ -3,15 +3,22 @@ import { EventEmitter } from './components/base/events';
 import { BasketModel } from './components/BasketModel';
 import { CardModel } from './components/CardModel';
 import { CardUI } from './components/CardUI';
-import { Popup } from './components/Popup';
-import { CardFullUI } from './components/CardFullUI';
+// import { Popup } from './components/Popup';
+// import { CardFullUI } from './components/CardFullUI';
 import './scss/styles.scss';
 import { Card } from './types';
 import { API_URL, settings } from './utils/constants';
 import { cloneTemplate, ensureAllElements, ensureElement } from './utils/utils';
+// import { BasketUI } from './components/BasketUI';
+import { Popup } from './components/Popup';
+import { PageUI } from './components/PageUI';
+import { CardFullUI } from './components/CardFullUI';
+import { CardPageUI } from './components/CardPageUI';
+import { CardBasketUI } from './components/CardBasketUI';
 import { BasketUI } from './components/BasketUI';
 
 // =================константы=================
+const pageElement = ensureElement(settings.page) as HTMLBodyElement;
 const cardTemplate = ensureElement(
 	settings.templateCard
 ) as HTMLTemplateElement;
@@ -33,15 +40,12 @@ const eventEmitter = new EventEmitter();
 const api = new Api(API_URL);
 const cardModel = new CardModel(eventEmitter);
 const basketModel = new BasketModel(eventEmitter);
-const popup = new Popup(modals, eventEmitter);
-
-// при загрузке страницы
-
-function callback() {
-	popup.openPopup(modalBasketList.closest(settings.modal), modalBasketList);
-}
-
-eventEmitter.on(`basket:openPopup`, callback);
+const page = new PageUI(pageElement, eventEmitter);
+const basketUI = new BasketUI(
+	cloneTemplate(settings.templateBasket),
+	eventEmitter
+);
+const popup = new Popup(modalContainer, eventEmitter);
 
 // =================api запросы=================
 api
@@ -55,85 +59,78 @@ api
 // загрузка карточек страницы
 eventEmitter.on(`loaded:page`, () => {
 	cardModel.getDataAllCards().forEach((objCard) => {
-		const card = new CardUI(
+		const card = new CardPageUI(
 			cloneTemplate(cardTemplate),
 			eventEmitter,
-			objCard.id,
-			`card:click`
+			objCard.id
 		);
 		const element = card.render(objCard);
-		mainGallery.append(element);
+		page.setGallaryItem(element);
 	});
+	page.setGallaryPage();
 });
 
 // клик по карточке
 eventEmitter.on<Pick<Card, `id`>>(`card:click`, ({ id }) => {
-	const objCard = cardModel.getDataCard(id);
-	const previewCard = new CardFullUI(
-		cloneTemplate(cardPreviewTemplate),
+	const cardExample = new CardFullUI(
+		cloneTemplate(settings.templateCardPreview),
 		eventEmitter,
-		id,
-		`card:clickAddBasket`
+		id
 	);
-	const element = previewCard.render(objCard);
-	modalContent.replaceChildren(element);
-	popup.openPopup(modalContent.closest(settings.modal), modalContent);
+	const dataCard = cardModel.getDataCard(id);
+	const elementCard = cardExample.render(dataCard);
+	popup.setContent(elementCard);
+	popup.openPopup();
 });
 
 // клик по крестику или оверлей попапа
-eventEmitter.on<{ modalActive: HTMLElement }>(
-	`popup:close`,
-	({ modalActive }) => {
-		popup.closePopup(modalActive);
-	}
-);
-
-// клик по кнопке "добавить в корзину"
-eventEmitter.on<{ id: string; evtTarget: HTMLElement }>(
-	`card:clickAddBasket`,
-	({ id, evtTarget }) => {
-		const objCard = cardModel.getDataCard(id);
-		basketModel.addProduct(objCard);
-
-		const modalActive = evtTarget.closest(settings.modal);
-		eventEmitter.emit(`popup:close`, { modalActive });
-	}
-);
-
-// клик по кнопке удаления элемента в корзине
-eventEmitter.on<{ id: string }>(`basket:clickDelButton`, ({ id }) => {
-	basketModel.delProduct(id);
+eventEmitter.on(`popup:close`, () => {
+	popup.closePopup();
+	popup.clearContentPopup();
 });
 
-// изменениие списка корзины
-eventEmitter.on(`basket:changeProductList`, () => {
-	headerBasketCounterSpan.textContent = String(basketModel.totalItems);
+// клик по кнопке "добавить в корзину"
+eventEmitter.on<{ id: string }>(`card:clickAddBasket`, ({ id }) => {
+	const dataCard = cardModel.getDataCard(id);
+	basketModel.addProduct(dataCard);
+});
 
-	const basketList = basketModel.getProductList();
-	const totalPrice = basketModel.total		
-	
-	const arrElementsHTML: HTMLElement[] = [];
+// изменение списка корзины
+eventEmitter.on(`basket:changeList`, () => {
+	page.render({ basketCounter: basketModel.totalItems });
+	const basketDataCards = basketModel.getProductList();
 
-	basketList.forEach((element, index) => {
-		const basket = new BasketUI(
-			cloneTemplate(templateCardBasket),
+	const elementsBasket = basketDataCards.map((element, itemIndex) => {
+		const cardExample = new CardBasketUI(
+			cloneTemplate(settings.templateCardBasket),
 			eventEmitter,
 			element.id
 		);
-		const objNew = Object.assign({ index, totalPrice }, element);
-		const basketElement = basket.render(objNew);
-		arrElementsHTML.push(basketElement);
+		const elementCardBasket = cardExample.render(
+			Object.assign(element, { itemIndex })
+		);
+		return elementCardBasket;
+	})
+	basketModel.setElements(elementsBasket)
+});
+
+// клик по кнопке удаления элемента в корзине
+eventEmitter.on<{ id: string }>(`card:delItemBasket`, ({ id }) => {
+	basketModel.delProduct(id);
+	const basketItems = basketModel.elements
+	basketUI.render({
+		totalPrice: basketModel.total,
+		basketItems,
 	});
-	modalBasketList.replaceChildren(...arrElementsHTML);
+});
 
-if (!basketList.length) {
-	console.log(`da`);
-}
-
-
-
-
-
-
-
-})
+// клик по корзине
+eventEmitter.on(`headerBasketButton:click`, () => {	
+	const basketItems = basketModel.elements
+	const elementsBasket = basketUI.render({
+		totalPrice: basketModel.total,
+		basketItems,
+	});
+	popup.setContent(elementsBasket);
+	popup.openPopup();
+});
