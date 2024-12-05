@@ -26,5 +26,6 @@ export class CardModel implements ICard {
 		this.cards = res.items;
 		this.total = res.total;
 		this.eventEmitter.emit(`loaded:page`);
+		this.eventEmitter.emit(`basket:changeList`);
 	}
 }

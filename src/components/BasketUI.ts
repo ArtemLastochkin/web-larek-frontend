@@ -12,6 +12,7 @@ import { IEvents } from "./base/events";
 
 interface IBasketUI {
 	totalPrice: string
+	itemsBasketBoolean: boolean
 	basketItems: HTMLElement[]
 }
 
@@ -37,5 +38,9 @@ protected basketList: HTMLElement
 
 	set basketItems(value: HTMLElement[]) {
 		this.basketList.replaceChildren(...value)
+	}
+
+	set itemsBasketBoolean(value: boolean) {
+		this.setDisabled(this.basketButton, value)
 	}
 }

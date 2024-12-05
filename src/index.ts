@@ -98,6 +98,8 @@ eventEmitter.on<{ id: string }>(`card:clickAddBasket`, ({ id }) => {
 // изменение списка корзины
 eventEmitter.on(`basket:changeList`, () => {
 	page.render({ basketCounter: basketModel.totalItems });
+	const itemsBasketBoolean = basketModel.checkItems();
+	basketUI.render({ itemsBasketBoolean });
 	const basketDataCards = basketModel.getProductList();
 
 	const elementsBasket = basketDataCards.map((element, itemIndex) => {
@@ -110,14 +112,14 @@ eventEmitter.on(`basket:changeList`, () => {
 			Object.assign(element, { itemIndex })
 		);
 		return elementCardBasket;
-	})
-	basketModel.setElements(elementsBasket)
+	});
+	basketModel.setElements(elementsBasket);
 });
 
 // клик по кнопке удаления элемента в корзине
 eventEmitter.on<{ id: string }>(`card:delItemBasket`, ({ id }) => {
 	basketModel.delProduct(id);
-	const basketItems = basketModel.elements
+	const basketItems = basketModel.elements;
 	basketUI.render({
 		totalPrice: basketModel.total,
 		basketItems,
@@ -125,8 +127,8 @@ eventEmitter.on<{ id: string }>(`card:delItemBasket`, ({ id }) => {
 });
 
 // клик по корзине
-eventEmitter.on(`headerBasketButton:click`, () => {	
-	const basketItems = basketModel.elements
+eventEmitter.on(`headerBasketButton:click`, () => {
+	const basketItems = basketModel.elements;
 	const elementsBasket = basketUI.render({
 		totalPrice: basketModel.total,
 		basketItems,

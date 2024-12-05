@@ -3,6 +3,7 @@ import { IEvents } from './base/events';
 
 export class BasketModel implements IBasketModel {
 	protected cardList: Card[] = [];
+	protected activeButton: boolean
 	protected cardElements: HTMLElement[] = [];
 
 	constructor(protected events: IEvents) {}
@@ -25,6 +26,10 @@ export class BasketModel implements IBasketModel {
 
 	getProductList(): Card[] {
 		return this.cardList;
+	}
+
+	checkItems(): boolean {
+		return this.cardList.length === 0 ? true : false
 	}
 
 	get total(): string {
