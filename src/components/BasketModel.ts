@@ -3,7 +3,6 @@ import { IEvents } from './base/events';
 
 export class BasketModel implements IBasketModel {
 	protected cardList: Card[] = [];
-	protected activeButton: boolean
 	protected cardElements: HTMLElement[] = [];
 
 	constructor(protected events: IEvents) {}

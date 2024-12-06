@@ -1,20 +1,8 @@
-// import { Card } from '../types';
-// import { settings } from '../utils/constants';
-// import { ensureElement } from '../utils/utils';
-// import { Component } from './base/Component';
-// import { IEvents } from './base/events';
-
-import { Card } from "../types";
+import { IBasketUI } from "../types";
 import { settings } from "../utils/constants";
 import { ensureElement } from "../utils/utils";
 import { Component } from "./base/Component";
 import { IEvents } from "./base/events";
-
-interface IBasketUI {
-	totalPrice: string
-	itemsBasketBoolean: boolean
-	basketItems: HTMLElement[]
-}
 
 export class BasketUI extends Component<IBasketUI> implements IBasketUI {
 protected totalPriceElement: HTMLElement
@@ -27,8 +15,8 @@ protected basketList: HTMLElement
 		this.basketButton = ensureElement(settings.basketButton, this.container)
 		this.basketList = ensureElement(settings.basketList, this.container) as HTMLElement
 
-		this.basketButton.addEventListener(`click`, (evt: Event) => {
-			// event.emit(`basket:clickDelButton`, { id });
+		this.basketButton.addEventListener(`click`, () => {
+			event.emit(`basket:sendList`);
 		});
 	}
 

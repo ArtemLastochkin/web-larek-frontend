@@ -10,10 +10,9 @@ export class CardFullUI extends CardPageUI {
 
 	constructor(
 		container: HTMLTemplateElement,
-		events: IEvents,
-		id: string,
+		events: IEvents
 	) {
-		super(container, events, id);
+		super(container, events);
 		this.descriptionElement = ensureElement(
 			settings.textSelector,
 			this.container
@@ -24,13 +23,7 @@ export class CardFullUI extends CardPageUI {
 			this.container
 		) as HTMLButtonElement;
 
-		
-			this.buttonInBasketElement.addEventListener(`click`, (evt: Event) => {
-				const evtTarget = evt.target as HTMLElement;
-				events.emit(`card:clickAddBasket`, { id, evtTarget })})
+			this.buttonInBasketElement.addEventListener(`click`, () => {
+				events.emit(`card:clickAddBasket`, { id: this.idCard })})
 	}
-
-	// set description(value: string) {
-	// 	this.setText(this.textElement, value);
-	// }
 }

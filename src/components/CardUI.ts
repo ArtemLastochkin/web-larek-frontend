@@ -4,12 +4,13 @@ import { ensureElement } from '../utils/utils';
 import { Component } from './base/Component';
 import { IEvents } from './base/events';
 
-export class CardUI extends Component<Card> {
+export class CardUI extends Component<Card> implements Card {
 	protected categoryElement: HTMLSpanElement;
 	protected titleElement: HTMLElement;
 	protected imageElement: HTMLImageElement;
 	protected priceElement: HTMLSpanElement;
 	protected descriptionElement: HTMLParagraphElement;
+	protected idCard: string;
 
 	constructor(container: HTMLElement) {
 		super(container);
@@ -20,31 +21,32 @@ export class CardUI extends Component<Card> {
 	set category(value: string) {
 		this.setText(this.categoryElement, value);
 		if (this.categoryElement !== undefined) {
-		super.toggleClass(
-			this.categoryElement,
-			`card__category_soft`,
-			value === `софт-скил`
-		);
-		super.toggleClass(
-			this.categoryElement,
-			`card__category_other`,
-			value === `другое`
-		);
-		super.toggleClass(
-			this.categoryElement,
-			`card__category_hard`,
-			value === `хард-скил`
-		);
-		super.toggleClass(
-			this.categoryElement,
-			`card__category_button`,
-			value === `кнопка`
-		);
-		super.toggleClass(
-			this.categoryElement,
-			`card__category_additional`,
-			value === `дополнительное`
-		);}
+			super.toggleClass(
+				this.categoryElement,
+				`card__category_soft`,
+				value === `софт-скил`
+			);
+			super.toggleClass(
+				this.categoryElement,
+				`card__category_other`,
+				value === `другое`
+			);
+			super.toggleClass(
+				this.categoryElement,
+				`card__category_hard`,
+				value === `хард-скил`
+			);
+			super.toggleClass(
+				this.categoryElement,
+				`card__category_button`,
+				value === `кнопка`
+			);
+			super.toggleClass(
+				this.categoryElement,
+				`card__category_additional`,
+				value === `дополнительное`
+			);
+		}
 	}
 
 	set title(value: string) {
@@ -55,11 +57,15 @@ export class CardUI extends Component<Card> {
 		this.setImage(this.imageElement, CDN_URL + value);
 	}
 
-	set price(value: string) {
+	set price(value: number | null) {
 		this.setText(this.priceElement, Number(value) + ` синапсов`);
 	}
 
 	set description(value: string) {
 		this.setText(this.descriptionElement, value);
+	}
+
+	set id(value: string) {
+		this.idCard = value
 	}
 }

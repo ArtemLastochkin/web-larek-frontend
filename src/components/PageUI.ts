@@ -1,14 +1,8 @@
-import { Card } from '../types';
+import { IPageUI } from '../types';
 import { settings } from '../utils/constants';
-import { ensureAllElements, ensureElement } from '../utils/utils';
+import { ensureElement } from '../utils/utils';
 import { Component } from './base/Component';
 import { IEvents } from './base/events';
-
-interface IPageUI {
-	basketCounter: string;
-	setGallaryItem(value: HTMLElement): void;
-	setGallaryPage(): void;
-}
 
 export class PageUI extends Component<IPageUI> implements IPageUI {
 	protected headerBasketCounter: HTMLSpanElement;

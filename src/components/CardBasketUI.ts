@@ -1,31 +1,18 @@
-import { Card, ICard } from '../types';
+import { ICardBasketUI } from '../types';
 import { settings } from '../utils/constants';
 import { ensureElement } from '../utils/utils';
 import { IEvents } from './base/events';
-import { CardPageUI } from './CardPageUI';
 import { CardUI } from './CardUI';
 
-interface ICardBasketUI {
-	itemIndex: string
-}
-
 export class CardBasketUI extends CardUI implements ICardBasketUI {
-  protected buttonInBasketElement: HTMLButtonElement 
-	protected counterItem: HTMLElement
 	protected itemIndexElement: HTMLSpanElement 
 	protected itemDeleteButton: HTMLButtonElement
 
 	constructor(
 		container: HTMLTemplateElement,
-		events: IEvents,
-		id: string,
+		events: IEvents
 	) {
 		super(container);
-		this.buttonInBasketElement = ensureElement(
-			settings.buttonSelector,
-			this.container
-		) as HTMLButtonElement;
-
 		this.itemIndexElement = ensureElement(
 			settings.basketItemIndex,
 			this.container
@@ -34,7 +21,7 @@ export class CardBasketUI extends CardUI implements ICardBasketUI {
 		this.itemDeleteButton = ensureElement(settings.basketItemDelete, this.container) as HTMLButtonElement
 
 		this.itemDeleteButton.addEventListener(`click`, () => {
-			events.emit(`card:delItemBasket`, { id })})
+			events.emit(`card:delItemBasket`, { id: this.idCard })})
 	}
 
 	set itemIndex(value: string) {

@@ -2,7 +2,7 @@ import { Api, ApiListResponse } from './components/base/api';
 import { EventEmitter } from './components/base/events';
 import { BasketModel } from './components/BasketModel';
 import { CardModel } from './components/CardModel';
-import { CardUI } from './components/CardUI';
+// import { CardUI } from './components/CardUI';
 // import { Popup } from './components/Popup';
 // import { CardFullUI } from './components/CardFullUI';
 import './scss/styles.scss';
@@ -16,6 +16,8 @@ import { CardFullUI } from './components/CardFullUI';
 import { CardPageUI } from './components/CardPageUI';
 import { CardBasketUI } from './components/CardBasketUI';
 import { BasketUI } from './components/BasketUI';
+import { UserDataModel } from './components/UserDataModel';
+import { PaymentUI } from './components/PaymentUI';
 
 // =================константы=================
 const pageElement = ensureElement(settings.page) as HTMLBodyElement;
@@ -40,12 +42,14 @@ const eventEmitter = new EventEmitter();
 const api = new Api(API_URL);
 const cardModel = new CardModel(eventEmitter);
 const basketModel = new BasketModel(eventEmitter);
+const userDataModel = new UserDataModel()
 const page = new PageUI(pageElement, eventEmitter);
 const basketUI = new BasketUI(
 	cloneTemplate(settings.templateBasket),
 	eventEmitter
 );
 const popup = new Popup(modalContainer, eventEmitter);
+
 
 // =================api запросы=================
 api
@@ -61,8 +65,7 @@ eventEmitter.on(`loaded:page`, () => {
 	cardModel.getDataAllCards().forEach((objCard) => {
 		const card = new CardPageUI(
 			cloneTemplate(cardTemplate),
-			eventEmitter,
-			objCard.id
+			eventEmitter
 		);
 		const element = card.render(objCard);
 		page.setGallaryItem(element);
@@ -74,8 +77,7 @@ eventEmitter.on(`loaded:page`, () => {
 eventEmitter.on<Pick<Card, `id`>>(`card:click`, ({ id }) => {
 	const cardExample = new CardFullUI(
 		cloneTemplate(settings.templateCardPreview),
-		eventEmitter,
-		id
+		eventEmitter
 	);
 	const dataCard = cardModel.getDataCard(id);
 	const elementCard = cardExample.render(dataCard);
@@ -106,7 +108,6 @@ eventEmitter.on(`basket:changeList`, () => {
 		const cardExample = new CardBasketUI(
 			cloneTemplate(settings.templateCardBasket),
 			eventEmitter,
-			element.id
 		);
 		const elementCardBasket = cardExample.render(
 			Object.assign(element, { itemIndex })
@@ -135,4 +136,25 @@ eventEmitter.on(`headerBasketButton:click`, () => {
 	});
 	popup.setContent(elementsBasket);
 	popup.openPopup();
+});
+
+// клик по кнопке оформить в корзине
+eventEmitter.on(`basket:sendList`, () => {
+	const items = basketModel.getProductList().map((element)=>{
+		return element.id
+	})
+	userDataModel.setIdItems(items)
+	const payment = new PaymentUI(cloneTemplate(settings.templateOrder), eventEmitter)
+	popup.setContent(payment.render())
+})
+
+// событие ввода Payment
+eventEmitter.on(`payment:input`, () => {
+	
+})
+
+eventEmitter.on<{payment: string, button: HTMLButtonElement}>(`payment:click`, ({payment , button}) => {
+	
+		// button.classList.toggle(`button_alt-active`, payment === settings.onlinePayment)
+	
 });

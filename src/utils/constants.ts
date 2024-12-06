@@ -6,15 +6,17 @@ export const settings = {
   productApi: `/product`,
   mainGallery: `.gallery`,
   galleryItem: `.gallery__item`,
+
   modalContainer: `#modal-container`,
   modal: `.modal`,
   modalContainerClass: `.modal__container`,
   modalContent: `.modal__content`,
   modalActiveClass: `modal_active`,
   modalCloseButton: `.modal__close`,
-  modalPreview: `.card_full`,
+
   headerBasketButton: `.header__basket`,
   headerBasketCounterSpan: `.header__basket-counter`,
+
   modalBasket: `.basket`,
   basketItem: `.basket__item`,
   basketList: `.basket__list`,
@@ -22,6 +24,7 @@ export const settings = {
   basketPrice: `.basket__price`,
   basketItemDelete: `.basket__item-delete`,
   basketButton: `.basket__button`,
+
   templateCard: `#card-catalog`,
   categorySelector: `.card__category`,
   titleSelector: `.card__title`,
@@ -29,22 +32,22 @@ export const settings = {
   priceSelector: `.card__price`, 
   textSelector: `.card__text`,
   buttonSelector: `.card__button`,
+  modalPreview: `.card_full`,
+
+  orderButtons: `.order__buttons`,
+  orderField: `.order__field`,
+  nameCardButton: ` [name="card"]`,
+  nameCashButton: ` [name="cash"]`,
+  nameAddress: `[name="address"]`,
+  onlinePayment: `online`,
+  offlinePayment: `offline`,
+
   templateSuccess: `#success`,
   templateCardPreview: `#card-preview`,
   templateCardBasket: `#card-basket`,
   templateBasket: `#basket`,
   templateOrder: `#order`,
   templateContacts: `#contacts`,
-  // modalContainerSuccess: `#modal-container-success`,
-  // modalContainerContact: `#modal-container-contact`,
-  // modalContainerPayment: `#modal-container-payment`,
-  // modalContainerBasket: `#modal-container-basket`,
-  // modalContainerPreview: `#modal-container-preview`,
-  // view: {
-  //   gallery: `gallery`, 
-  //   preview: `preview`, 
-  //   basket: `basket`
-  // },
 };
 
 
