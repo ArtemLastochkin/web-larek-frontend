@@ -90,13 +90,17 @@ yarn build
    Свойства объекта:
 
    > total: number - Общее количество карточек
+
    > cards: Card[] - Массив с объектами карточек
 
    Методы класса:
 
    > getDataAllCards(): Card[] - Возвращает массив с объектами карточек
+
    > getDataCard(id: string): Card - Возвращает объект карточки с переданным в параметре id
+
    > getDataCardToBasket(id: string): Partial<Card> - Возвращает объект карточки, с переданным в параметре id, состоящий из двух полей в виде { title, price }
+
    > setData(res: ApiListResponse<Card>) - Сохраняет данные в классе. Получает в параеметре объект по типу ApiListResponse<Card> от сервера. Вызывает события "загрузки страницы" и "списка корзины"
 
 2. Класс BasketModel
@@ -105,17 +109,25 @@ yarn build
    Свойства класса:
 
    > cardList: Card[] - Массив с объектами карточек
+
    > cardElements: HTMLElement[] - Массив с HTML элементами карточек
 
    Методы класса:
 
    > setElements(value: HTMLElement[]) - Записывает переданной значение в свойство cardElements. Принимает на вход массив HTML элементов.
-   > addProduct(obj: Card): void - Добавляет объект в свойство cardList, при условии что такого объекта в свойстве еще нет. Вызывает событие изменение списка карточек в корзине
+
+   > addProduct(obj: Card): void - Добавляет объект в свойство cardList, при условии что такого объекта в свойстве еще нет. Вызывает событие изменение списка 
+   карточек в корзине
    > delProduct(id: string) - Удаляет карточку из свойства cardList. Вызывает событие изменение списка карточек в корзине
+
    > getProductList(): Card[] - Возвращает массив с объектами карточек из свойства cardList
+
    > checkItems(): boolean - Вызов метода проверяет наличие элементов в корзине и возвращает true = корзина пуста, false = корзина не пуста
+
    > get total(): string - геттер возвращает общую стоимость всех элементов корзины в виде строки
+
    > get totalItems(): string - свойство-геттер возвращает общее количество элементов корзины в виде строки
+
    > get elements(): HTMLElement[] - свойство-геттер возвращает массив HTML элементов корзины
 
 ## Отображение
@@ -128,14 +140,19 @@ yarn build
     Свойства класса:
 
     > modalContent: HTMLElement - HTML элемент контента в модальном окне
+
     > modalContainer: HTMLElement - Модальное окно
+
     > modalCloseButton: HTMLButtonElement - Кнопка закрытия модального окна
 
     Методы класса:
 
     > closePopup() - Закрывает модальное окно
+
     > openPopup() - Открывает модальное окно
+
     > clearContentPopup() - Очищает весь контент внутри модального окна
+
     > setContent(value: HTMLElement) - Заполняет контент внутри модального окна. В параметрах принимает HTML разметку
 
 2.  Класс PageUI
@@ -144,14 +161,19 @@ yarn build
     Свойства класса:
 
     > headerBasketCounter: HTMLSpanElement - Харнит HTML элемент счетчика количества элементов в корзине
+
     > headerBasketButton: HTMLButtonElement - Харнит HTML элемент кнопки корзины
+
     > mainGallery: HTMLElement - Харнит HTML элемент контейнер для карточек главной страницы
+
     > cardsMainGallery: HTMLElement[] = [] - Харнит массив HTML элементов карточек главной страницы. Инициализируется пустым массивом
 
     Методы класса:
 
     > set basketCounter(value: string) - Свойство-сеттер устанавливает текстовое значение счетчика количества элементов в корзине
+
     > setGallaryItem(value: HTMLElement) - Метод добавляет HTML элемент в массив HTML элементов карточек свойства cardsMainGallery
+
     > setGallaryPage() - Метод добавляет карточки на страницу
 
 ### Отображение карточек
@@ -162,19 +184,29 @@ yarn build
     Свойства класса:
 
 > categoryElement: HTMLSpanElement - HTML элемент с категорией товара
+
 > titleElement: HTMLElement - HTML элемент с названием карточки
+
 > imageElement: HTMLImageElement - HTML элемент с картинкой карточки
+
 > priceElement: HTMLSpanElement - HTML элемент с ценой товара в карточке
+
 > descriptionElement: HTMLParagraphElement - HTML элемент с описанием товара карточки
+
 > idCard: string - id карточки
 
     Методы класса:
 
 > set category(value: string) - Свойство-сеттер устанавливает текстовое значение HTML элемента в поле categoryElement. В зависимости от переданного значения, переключает класса элементу с помощью метода toggleClass
+
 > set title(value: string) - Свойство-сеттер устанавливает текстовое значение HTML элемента в поле titleElement
+
 > set image(value: string) - Свойство-сеттер устанавливает значение атрибута src в поле imageElement
+
 > set price(value: string) - Свойство-сеттер устанавливает текстовое значение HTML элемента priceElement
+
 > set description(value: string) - Свойство-сеттер устанавливает текстовое значение HTML элемента descriptionElement
+
 > set id(value: string) - Свойство-сеттер устанавливает значение поля idCard
 
 3.2 Класс CardPageUI
@@ -198,6 +230,7 @@ yarn build
 Свойства класса:
 
 > itemIndexElement: HTMLSpanElement - Индекс элемента в корзине
+
 > itemDeleteButton: HTMLButtonElement - Кнопка удаления карточки
 
 Методы класса:
@@ -207,35 +240,3 @@ yarn build
 4. Класс BasketUI
 Компонент отвечает за отображение элементов корзины в модальном окне. Конструктор принимает шаблон элементов корзины и брокер событий. Инициализирует поля totalPriceElement, basketButton, basketList и вешает слушатель клика на кнопку "оформить". В коллбэке слушателя клика вызывается событие "Оформить"
 Класс расширяет абстрактный класс Component<IBasketUI> и соответствует интерфейсу IBasketUI. 
-
-
-
-
-ass BasketUI extends Component<IBasketUI> implements IBasketUI {
-protected totalPriceElement: HTMLElement
-protected basketButton: HTMLElement
-protected basketList: HTMLElement
-
-	constructor(container: HTMLTemplateElement, event: IEvents) {
-		super(container);
-		this.totalPriceElement = ensureElement(settings.basketPrice, this.container);
-		this.basketButton = ensureElement(settings.basketButton, this.container)
-		this.basketList = ensureElement(settings.basketList, this.container) as HTMLElement
-
-		this.basketButton.addEventListener(`click`, (evt: Event) => {
-			event.emit(`basket:clickButton`);
-		});
-	}
-
-	set totalPrice(value: string) {
-		this.setText(this.totalPriceElement, Number(value) + ` синапсов`);
-	}
-
-	set basketItems(value: HTMLElement[]) {
-		this.basketList.replaceChildren(...value)
-	}
-
-	set itemsBasketBoolean(value: boolean) {
-		this.setDisabled(this.basketButton, value)
-	}
-}
