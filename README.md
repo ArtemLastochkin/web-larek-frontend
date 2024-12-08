@@ -356,7 +356,7 @@ yarn build
 
 ## Типы данных
 
-Тип данных карточки является основным типом в приложении
+1. Тип данных карточки является основным типом в приложении
 ```
 type Card = {
 id: string; 
@@ -368,7 +368,7 @@ price: number | null;
 };
 ```
 
-Интерфейс описывает класс UserDataModel
+2. Интерфейс описывает класс UserDataModel
 ```
 interface IUserDataModel {
 setIdItems(value: string[]): void
@@ -382,6 +382,8 @@ clearProperty(): void
 }
 ```
 
+3. Интерфейс описывает класс CardModel
+```
 interface ICard {
 total: number;
 cards: Card[];
@@ -390,7 +392,10 @@ getDataCard(id: string): Card;
 getDataCardToBasket(id: string): Partial<Card>;
 setData(res: ApiListResponse<Card>): void;
 }
+```
 
+4. Интерфейс описывает класс BasketModel
+```
 interface IBasketModel {
 addProduct(obj: Card): void;
 delProduct(id: string): void;
@@ -402,56 +407,85 @@ total: string;
 totalItems: string;
 elements: HTMLElement[];
 }
+```
 
+5. Интерфейс описывает класс Popup
+```
 interface IPopup {
 closePopup(): void;
 openPopup(): void;
 clearContentPopup(): void;
 setContent(value: HTMLElement): void;
 }
+```
 
+6. Интерфейс описывает класс PageUI
+```
 interface IPageUI {
 basketCounter: string;
 setGallaryItem(value: HTMLElement): void;
 setGallaryPage(): void;
 }
+```
 
+7. Интерфейс описывает класс CardBasketUI
+```
 interface ICardBasketUI extends Card {
 itemIndex: string;
 }
+```
 
+8. Интерфейс описывает класс BasketUI
+```
 interface IBasketUI {
 totalPrice: string;
 itemsBasketBoolean: boolean;
 basketItems: HTMLElement[];
 }
+```
 
+9. Интерфейс описывает класс PaymentUI
+```
 interface IPayment {
 address: InputSettings
 }
+```
 
+10. Интерфейс описывает класс ContactUI
+```
 interface IContactUI {
 email: InputSettings,
 tel: InputSettings
 }
+```
 
+11. Тип описывает объект настроек для инпутов 
+```
 type InputSettings = {
-required: boolean;
-typeTel: string;
-typeEmail: string;
-pattern: string;
+required: boolean; - значение атрибута required
+typeTel: string; - Значение атрибута name
+typeEmail: string; - Значение атрибута name
+pattern: string; - Регулярное выражение
 };
+```
 
+12. Тип описывает настройки для инпутов
+```
 type InputSetting = {
-address: Partial<InputSettings>;
-tel: Partial<InputSettings>;
-email: Partial<InputSettings>;
+address: Partial<InputSettings>; - настройки для инпута адреса 
+tel: Partial<InputSettings>; - настройки для инпута телефона
+email: Partial<InputSettings>; - настройки для инпута email
 };
+```
 
+13. Интерфейс описывает класс Success
+```
 interface Success {
 total: number;
 }
+```
 
+14. Тип описывает объект полученный от сервера после отправки данных пользователя
 ```
 type ResponseApiPost = Success & { id: Pick<Card, `id`> };
 ```
