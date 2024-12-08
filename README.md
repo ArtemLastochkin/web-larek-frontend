@@ -66,9 +66,9 @@ yarn build
    Абстрактный класс, является общим для классов отображения. Принимает параметром шаблон HTML элемента и вызывается в конструкторах дочерних классов.
    Содержит методы для работы с разметкой.
 
-> toggleClass(element: HTMLElement, className: string, force?: boolean) - Переключает класс на HTML на переданном элементе
+- toggleClass(element: HTMLElement, className: string, force?: boolean) - Переключает класс на HTML на переданном элементе  
 
-> protected setText(element: HTMLElement, value: unknown) - Устанавливает текстовое содежимое HTML элемента, принимает 2 обязательных параметра, HTML элемент и значение текста.
+- protected setText(element: HTMLElement, value: unknown) - Устанавливает текстовое содежимое HTML элемента, принимает 2 обязательных параметра, HTML элемент и значение текста  
 
 > setDisabled(element: HTMLElement, state: boolean) - Устанавливает или убирает статус Disabled. Принимает параметром HTML элемент и булево значение.
 
