@@ -18,8 +18,8 @@ export class CardModel implements ICard {
 
 	getDataCardToBasket(id: string): Partial<Card> {
 		const cardObj = this.cards.filter((e: Card) => e.id === id)[0];
-		const newCardObj = {title: cardObj.title, price: cardObj.price}
-		return newCardObj
+		const newCardObj = { title: cardObj.title, price: cardObj.price };
+		return newCardObj;
 	}
 
 	setData(res: ApiListResponse<Card>) {

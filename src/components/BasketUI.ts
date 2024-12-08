@@ -1,19 +1,25 @@
-import { IBasketUI } from "../types";
-import { settings } from "../utils/constants";
-import { ensureElement } from "../utils/utils";
-import { Component } from "./base/Component";
-import { IEvents } from "./base/events";
+import { IBasketUI } from '../types';
+import { settings } from '../utils/constants';
+import { ensureElement } from '../utils/utils';
+import { Component } from './base/Component';
+import { IEvents } from './base/events';
 
 export class BasketUI extends Component<IBasketUI> implements IBasketUI {
-protected totalPriceElement: HTMLElement
-protected basketButton: HTMLElement
-protected basketList: HTMLElement
+	protected totalPriceElement: HTMLElement;
+	protected basketButton: HTMLButtonElement;
+	protected basketList: HTMLElement;
 
 	constructor(container: HTMLTemplateElement, event: IEvents) {
 		super(container);
-		this.totalPriceElement = ensureElement(settings.basketPrice, this.container);
-		this.basketButton = ensureElement(settings.basketButton, this.container)
-		this.basketList = ensureElement(settings.basketList, this.container) as HTMLElement
+		this.totalPriceElement = ensureElement(
+			settings.basketPrice,
+			this.container
+		);
+		this.basketButton = ensureElement(
+			settings.basketButton,
+			this.container
+		) as HTMLButtonElement;
+		this.basketList = ensureElement(settings.basketList, this.container);
 
 		this.basketButton.addEventListener(`click`, () => {
 			event.emit(`basket:sendList`);
@@ -24,11 +30,11 @@ protected basketList: HTMLElement
 		this.setText(this.totalPriceElement, Number(value) + ` синапсов`);
 	}
 
-	set basketItems(value: HTMLElement[]) {
-		this.basketList.replaceChildren(...value)
+	set itemsBasketBoolean(value: boolean) {
+		this.setDisabled(this.basketButton, value);
 	}
 
-	set itemsBasketBoolean(value: boolean) {
-		this.setDisabled(this.basketButton, value)
+	set basketItems(value: HTMLElement[]) {
+		this.basketList.replaceChildren(...value);
 	}
 }

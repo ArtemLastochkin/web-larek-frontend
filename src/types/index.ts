@@ -9,6 +9,17 @@ export type Card = {
 	price: number | null;
 };
 
+export interface IUserDataModel {
+	setIdItems(value: string[]): void
+	setPayment(value: string): void
+	setAddress(value: string): void
+	setPhone(value: string): void
+	setEmail(value: string): void
+	setTotal(value: string | number | null): void
+	checkPayment(): boolean
+	clearProperty(): void
+}
+
 export interface ICard {
 	total: number;
 	cards: Card[];
@@ -23,6 +34,8 @@ export interface IBasketModel {
 	delProduct(id: string): void;
 	getProductList(): Card[];
 	setElements(value: HTMLElement[]): void;
+	checkItems(): boolean
+	clear(): void;
 	total: string;
 	totalItems: string;
 	elements: HTMLElement[];
@@ -51,15 +64,30 @@ export interface IBasketUI {
 	basketItems: HTMLElement[];
 }
 
-export type InputSettings = {
-		required: boolean;
-		typeTel: string;
-		typeEmail: string;
-		pattern: string
+export interface IPayment {
+	address: InputSettings
 }
+
+export interface IContactUI {
+	email: InputSettings,
+	tel: InputSettings
+}
+
+export type InputSettings = {
+	required: boolean;
+	typeTel: string;
+	typeEmail: string;
+	pattern: string;
+};
 
 export type InputSetting = {
 	address: Partial<InputSettings>;
 	tel: Partial<InputSettings>;
 	email: Partial<InputSettings>;
+};
+
+export interface Success {
+	total: number;
 }
+
+export type ResponseApiPost = Success & { id: Pick<Card, `id`> };

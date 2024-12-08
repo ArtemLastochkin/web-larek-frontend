@@ -1,8 +1,7 @@
-import { Card, ICard } from '../types';
+import { Card } from '../types';
 import { CDN_URL, settings } from '../utils/constants';
 import { ensureElement } from '../utils/utils';
 import { Component } from './base/Component';
-import { IEvents } from './base/events';
 
 export class CardUI extends Component<Card> implements Card {
 	protected categoryElement: HTMLSpanElement;
@@ -66,6 +65,6 @@ export class CardUI extends Component<Card> implements Card {
 	}
 
 	set id(value: string) {
-		this.idCard = value
+		this.idCard = value;
 	}
 }

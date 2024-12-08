@@ -1,23 +1,10 @@
-import { Card } from '../types';
+import { IUserDataModel } from '../types';
 import { settings } from '../utils/constants';
-
-// type IUserDataModel = {
-// 	// payment: string;
-// 	// email: string;
-// 	// phone: string;
-// 	// address: string;
-// 	// total: number;
-// 	items: string[];
-// }
-
-interface IUserDataModel {
-	setIdItems(value: string[]): void;
-}
 
 export class UserDataModel implements IUserDataModel {
 	protected payment: string = ``;
-	protected email: string = ``
-	protected phone: string = ``
+	protected email: string = ``;
+	protected phone: string = ``;
 	protected address: string = ``;
 	protected total: number;
 	protected items: string[];
@@ -44,6 +31,10 @@ export class UserDataModel implements IUserDataModel {
 		this.email = value;
 	}
 
+	setTotal(value: string | number | null) {
+		this.total = Number(value);
+	}
+
 	checkPayment(): boolean {
 		return (
 			(this.payment === settings.onlinePayment ||
@@ -51,14 +42,6 @@ export class UserDataModel implements IUserDataModel {
 			this.address !== ``
 		);
 	}
-
-	checkContact(): boolean {
-		return (
-			this.email !== `` &&
-			this.phone !== ``
-		);
-	}
-
 
 	clearProperty() {
 		this.payment = ``;

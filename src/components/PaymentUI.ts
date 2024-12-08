@@ -1,10 +1,10 @@
-import { InputSettings } from '../types';
+import { InputSettings, IPayment } from '../types';
 import { settings } from '../utils/constants';
 import { ensureElement } from '../utils/utils';
 import { IEvents } from './base/events';
 import { FormUI } from './FormUI';
 
-export class PaymentUI extends FormUI {
+export class PaymentUI extends FormUI implements IPayment {
 	protected cardButton: HTMLButtonElement;
 	protected cashButton: HTMLButtonElement;
 	protected addressInput: HTMLInputElement;

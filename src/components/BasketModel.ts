@@ -7,10 +7,6 @@ export class BasketModel implements IBasketModel {
 
 	constructor(protected events: IEvents) {}
 
-	setElements(value: HTMLElement[]) {
-		this.cardElements = value;
-	}
-
 	addProduct(obj: Card): void {
 		if (!this.cardList.includes(obj)) {
 			this.cardList.push(obj);
@@ -27,8 +23,18 @@ export class BasketModel implements IBasketModel {
 		return this.cardList;
 	}
 
+	setElements(value: HTMLElement[]) {
+		this.cardElements = value;
+	}
+
 	checkItems(): boolean {
-		return this.cardList.length === 0 ? true : false
+		return this.cardList.length === 0 ? true : false;
+	}
+
+	clear() {
+		this.cardList = [];
+		this.cardElements = [];
+		this.events.emit(`basket:changeList`);
 	}
 
 	get total(): string {

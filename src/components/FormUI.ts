@@ -1,4 +1,4 @@
-import { InputSetting, InputSettings } from '../types';
+import { InputSetting } from '../types';
 import { settings } from '../utils/constants';
 import { ensureElement } from '../utils/utils';
 import { Component } from './base/Component';

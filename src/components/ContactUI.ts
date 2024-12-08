@@ -1,10 +1,10 @@
-import { InputSettings } from '../types';
+import { IContactUI, InputSettings } from '../types';
 import { settings } from '../utils/constants';
 import { ensureElement } from '../utils/utils';
 import { IEvents } from './base/events';
 import { FormUI } from './FormUI';
 
-export class ContactUI extends FormUI {
+export class ContactUI extends FormUI implements IContactUI {
 	protected inputTelElement: HTMLInputElement;
 	protected inputEmailElement: HTMLInputElement;
 
@@ -20,9 +20,18 @@ export class ContactUI extends FormUI {
 		) as HTMLInputElement;
 
 		this.container.addEventListener(`input`, (evt: Event) => {
-			const evtTarget = evt.target as HTMLInputElement
-			const form = this.container as HTMLFormElement
-			event.emit(`contact:input`, { evtTarget: evtTarget, form: form, orderButton: this.orderButton, errorElement: this.errorElement });
+			const evtTarget = evt.target as HTMLInputElement;
+			const form = this.container as HTMLFormElement;
+			event.emit(`contact:input`, {
+				evtTarget: evtTarget,
+				form: form,
+				orderButton: this.orderButton,
+				errorElement: this.errorElement,
+			});
+		});
+
+		this.container.addEventListener(`submit`, (evt: Event) => {
+			event.emit(`contact:submit`, { evt: evt });
 		});
 	}
 

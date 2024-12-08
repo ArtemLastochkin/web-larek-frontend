@@ -2,14 +2,10 @@ import { Api, ApiListResponse } from './components/base/api';
 import { EventEmitter } from './components/base/events';
 import { BasketModel } from './components/BasketModel';
 import { CardModel } from './components/CardModel';
-// import { CardUI } from './components/CardUI';
-// import { Popup } from './components/Popup';
-// import { CardFullUI } from './components/CardFullUI';
 import './scss/styles.scss';
-import { Card } from './types';
+import { Card, ResponseApiPost } from './types';
 import { API_URL, settings } from './utils/constants';
-import { cloneTemplate, ensureAllElements, ensureElement } from './utils/utils';
-// import { BasketUI } from './components/BasketUI';
+import { cloneTemplate, ensureElement } from './utils/utils';
 import { Popup } from './components/Popup';
 import { PageUI } from './components/PageUI';
 import { CardFullUI } from './components/CardFullUI';
@@ -19,26 +15,14 @@ import { BasketUI } from './components/BasketUI';
 import { UserDataModel } from './components/UserDataModel';
 import { PaymentUI } from './components/PaymentUI';
 import { ContactUI } from './components/ContactUI';
+import { SuccessUI } from './components/SuccessUI';
 
 // =================константы=================
 const pageElement = ensureElement(settings.page) as HTMLBodyElement;
 const cardTemplate = ensureElement(
 	settings.templateCard
 ) as HTMLTemplateElement;
-const cardPreviewTemplate = ensureElement(
-	settings.templateCardPreview
-) as HTMLTemplateElement;
-const mainGallery = ensureElement(settings.mainGallery);
-const modals = ensureAllElements(settings.modal);
 const modalContainer = ensureElement(settings.modalContainer);
-const modalContent = ensureElement(settings.modalContent, modalContainer);
-const templateCardBasket = ensureElement(
-	settings.templateCardBasket
-) as HTMLTemplateElement;
-const modalBasketList = ensureElement(settings.basketList);
-const headerBasketButton = ensureElement(settings.headerBasketButton);
-const headerBasketCounterSpan = ensureElement(settings.headerBasketCounterSpan);
-
 const eventEmitter = new EventEmitter();
 const api = new Api(API_URL);
 const cardModel = new CardModel(eventEmitter);
@@ -133,6 +117,7 @@ eventEmitter.on(`headerBasketButton:click`, () => {
 	});
 	popup.setContent(elementsBasket);
 	popup.openPopup();
+	userDataModel.clearProperty();
 });
 
 // клик по кнопке оформить в корзине
@@ -145,11 +130,11 @@ eventEmitter.on(`basket:sendList`, () => {
 		cloneTemplate(settings.templateOrder),
 		eventEmitter
 	);
+	userDataModel.setTotal(basketModel.total);
 	popup.setContent(paymentExample.render(settings.inputSetting));
-	userDataModel.clearProperty();
 });
 
-// событие ввода
+// событие ввода адреса в форме оплаты
 eventEmitter.on<{
 	input: HTMLInputElement;
 	errorElement: HTMLElement;
@@ -208,33 +193,61 @@ eventEmitter.on<{
 	popup.setContent(contactExample.render(settings.inputSetting));
 });
 
-// событие ввода
+// событие ввода контактов
 eventEmitter.on<{
 	evtTarget: HTMLInputElement;
 	form: HTMLFormElement;
 	orderButton: HTMLButtonElement;
-	errorElement: HTMLSpanElement
+	errorElement: HTMLSpanElement;
 }>(`contact:input`, ({ evtTarget, form, orderButton, errorElement }) => {
 	if (evtTarget.getAttribute(`name`) === `email`) {
 		userDataModel.setEmail(evtTarget.value);
-		if (!userDataModel.checkContact() && evtTarget.validity.valid) {
-			errorElement.textContent = settings.textError.requiredTel
-			
+		if (!evtTarget.checkValidity()) {
+			errorElement.textContent = evtTarget.validationMessage;
+			orderButton.disabled = true;
+		} else if (evtTarget.checkValidity() && !form.checkValidity()) {
+			errorElement.textContent = settings.textError.requiredTel;
+			orderButton.disabled = true;
+		} else if (evtTarget.checkValidity() && form.checkValidity()) {
+			errorElement.textContent = settings.textError.nonError;
+			orderButton.disabled = false;
 		}
-
-
-		
 	} else if (evtTarget.getAttribute(`name`) === `phone`) {
 		userDataModel.setPhone(evtTarget.value);
+		if (!evtTarget.checkValidity()) {
+			errorElement.textContent = settings.textError.requiredTel;
+			orderButton.disabled = true;
+		} else if (evtTarget.checkValidity() && !form.checkValidity()) {
+			errorElement.textContent = settings.textError.requiredEmail;
+			orderButton.disabled = true;
+		} else if (evtTarget.checkValidity() && form.checkValidity()) {
+			errorElement.textContent = settings.textError.nonError;
+			orderButton.disabled = false;
+		}
+		if (form.checkValidity()) {
+			errorElement.textContent = settings.textError.nonError;
+			orderButton.disabled = false;
+		} else {
+			orderButton.disabled = true;
+		}
 	}
+});
 
-	
+// событий sumbit контактов
+eventEmitter.on<{ evt: Event }>(`contact:submit`, ({ evt }) => {
+	evt.preventDefault();
+	api.post(settings.orderApi, userDataModel).then((res: ResponseApiPost) => {
+		basketModel.clear();
+		const success = new SuccessUI(
+			cloneTemplate(settings.templateSuccess),
+			eventEmitter
+		);
+		const successElement = success.render({ total: res.total });
+		popup.setContent(successElement);
+	});
+});
 
-	// if (form.checkValidity() && userDataModel.checkContact()) {
-	// 	orderButton.disabled = false;
-	// 	errorElement.textContent = settings.textError.nonError
-	// } else {
-	// 	errorElement.textContent = settings.textError.requiredAll
-	// 	orderButton.disabled = true;
-	// }
+// событие нажатия на кнопку success
+eventEmitter.on(`success:clickClose`, () => {
+	popup.closePopup();
 });
