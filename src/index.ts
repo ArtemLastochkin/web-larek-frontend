@@ -18,6 +18,7 @@ import { CardBasketUI } from './components/CardBasketUI';
 import { BasketUI } from './components/BasketUI';
 import { UserDataModel } from './components/UserDataModel';
 import { PaymentUI } from './components/PaymentUI';
+import { ContactUI } from './components/ContactUI';
 
 // =================константы=================
 const pageElement = ensureElement(settings.page) as HTMLBodyElement;
@@ -42,14 +43,13 @@ const eventEmitter = new EventEmitter();
 const api = new Api(API_URL);
 const cardModel = new CardModel(eventEmitter);
 const basketModel = new BasketModel(eventEmitter);
-const userDataModel = new UserDataModel()
+const userDataModel = new UserDataModel();
 const page = new PageUI(pageElement, eventEmitter);
 const basketUI = new BasketUI(
 	cloneTemplate(settings.templateBasket),
 	eventEmitter
 );
 const popup = new Popup(modalContainer, eventEmitter);
-
 
 // =================api запросы=================
 api
@@ -63,10 +63,7 @@ api
 // загрузка карточек страницы
 eventEmitter.on(`loaded:page`, () => {
 	cardModel.getDataAllCards().forEach((objCard) => {
-		const card = new CardPageUI(
-			cloneTemplate(cardTemplate),
-			eventEmitter
-		);
+		const card = new CardPageUI(cloneTemplate(cardTemplate), eventEmitter);
 		const element = card.render(objCard);
 		page.setGallaryItem(element);
 	});
@@ -107,7 +104,7 @@ eventEmitter.on(`basket:changeList`, () => {
 	const elementsBasket = basketDataCards.map((element, itemIndex) => {
 		const cardExample = new CardBasketUI(
 			cloneTemplate(settings.templateCardBasket),
-			eventEmitter,
+			eventEmitter
 		);
 		const elementCardBasket = cardExample.render(
 			Object.assign(element, { itemIndex })
@@ -140,21 +137,104 @@ eventEmitter.on(`headerBasketButton:click`, () => {
 
 // клик по кнопке оформить в корзине
 eventEmitter.on(`basket:sendList`, () => {
-	const items = basketModel.getProductList().map((element)=>{
-		return element.id
-	})
-	userDataModel.setIdItems(items)
-	const payment = new PaymentUI(cloneTemplate(settings.templateOrder), eventEmitter)
-	popup.setContent(payment.render())
-})
+	const items = basketModel.getProductList().map((element) => {
+		return element.id;
+	});
+	userDataModel.setIdItems(items);
+	const paymentExample = new PaymentUI(
+		cloneTemplate(settings.templateOrder),
+		eventEmitter
+	);
+	popup.setContent(paymentExample.render(settings.inputSetting));
+	userDataModel.clearProperty();
+});
 
-// событие ввода Payment
-eventEmitter.on(`payment:input`, () => {
-	
-})
+// событие ввода
+eventEmitter.on<{
+	input: HTMLInputElement;
+	errorElement: HTMLElement;
+	orderButton: HTMLButtonElement;
+}>(`payment:input`, ({ input, errorElement, orderButton }) => {
+	userDataModel.setAddress(input.value);
+	if (!input.validity.valid) {
+		errorElement.textContent = settings.textError.requiredAddress;
+		orderButton.disabled = true;
+	} else if (input.validity.valid && userDataModel.checkPayment()) {
+		errorElement.textContent = settings.textError.nonError;
+		orderButton.disabled = false;
+	} else if (input.validity.valid && !userDataModel.checkPayment()) {
+		errorElement.textContent = settings.textError.typePayment;
+		orderButton.disabled = true;
+	}
+});
 
-eventEmitter.on<{payment: string, button: HTMLButtonElement}>(`payment:click`, ({payment , button}) => {
+// событие выбор оплаты
+eventEmitter.on<{
+	payment: string;
+	buttonClick: HTMLButtonElement;
+	otherButton: HTMLButtonElement;
+	errorElement: HTMLElement;
+	orderButton: HTMLButtonElement;
+}>(
+	`payment:click`,
+	({ payment, buttonClick, otherButton, errorElement, orderButton }) => {
+		userDataModel.setPayment(payment);
+		if (
+			payment === settings.onlinePayment ||
+			payment === settings.offlinePayment
+		) {
+			buttonClick.classList.toggle(`button_alt-active`, true);
+			otherButton.classList.toggle(`button_alt-active`, false);
+		}
+		if (userDataModel.checkPayment()) {
+			errorElement.textContent = settings.textError.nonError;
+			orderButton.disabled = false;
+		} else {
+			orderButton.disabled = true;
+			errorElement.textContent = settings.textError.requiredAddress;
+		}
+	}
+);
+
+// событие отправки формы оплаты
+eventEmitter.on<{
+	evt: Event;
+}>(`payment:clickSubmit`, ({ evt }) => {
+	evt.preventDefault();
+	const contactExample = new ContactUI(
+		cloneTemplate(settings.templateContacts),
+		eventEmitter
+	);
+	popup.setContent(contactExample.render(settings.inputSetting));
+});
+
+// событие ввода
+eventEmitter.on<{
+	evtTarget: HTMLInputElement;
+	form: HTMLFormElement;
+	orderButton: HTMLButtonElement;
+	errorElement: HTMLSpanElement
+}>(`contact:input`, ({ evtTarget, form, orderButton, errorElement }) => {
+	if (evtTarget.getAttribute(`name`) === `email`) {
+		userDataModel.setEmail(evtTarget.value);
+		if (!userDataModel.checkContact() && evtTarget.validity.valid) {
+			errorElement.textContent = settings.textError.requiredTel
+			
+		}
+
+
+		
+	} else if (evtTarget.getAttribute(`name`) === `phone`) {
+		userDataModel.setPhone(evtTarget.value);
+	}
+
 	
-		// button.classList.toggle(`button_alt-active`, payment === settings.onlinePayment)
-	
+
+	// if (form.checkValidity() && userDataModel.checkContact()) {
+	// 	orderButton.disabled = false;
+	// 	errorElement.textContent = settings.textError.nonError
+	// } else {
+	// 	errorElement.textContent = settings.textError.requiredAll
+	// 	orderButton.disabled = true;
+	// }
 });

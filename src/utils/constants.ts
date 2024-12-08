@@ -41,6 +41,27 @@ export const settings = {
   nameAddress: `[name="address"]`,
   onlinePayment: `online`,
   offlinePayment: `offline`,
+  formErrors: `.form__errors`,
+  textError: {
+    nonError: ``,
+    typePayment: `Выбирите тип оплаты`,
+    requiredAddress: `Заполните адрес`,
+    requiredAll: `Заполните все обязательные поля`,
+    requiredTel: `Заполните номер телефона`
+
+  },
+  orderButton: `.order__button`,
+  typeSubmit: `[type="submit"]`,
+
+  nameEmail: `[name="email"]`,
+  namePhone: `[name="phone"]`,
+
+  inputSetting: {
+    address: { required: true }, 
+    tel: { required: true, typeTel: `tel` , pattern: `^\+7[0-9]*$` }, 
+    email: { required: true, typeEmail: `email`},
+  },
+
 
   templateSuccess: `#success`,
   templateCardPreview: `#card-preview`,

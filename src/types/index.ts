@@ -50,3 +50,16 @@ export interface IBasketUI {
 	itemsBasketBoolean: boolean;
 	basketItems: HTMLElement[];
 }
+
+export type InputSettings = {
+		required: boolean;
+		typeTel: string;
+		typeEmail: string;
+		pattern: string
+}
+
+export type InputSetting = {
+	address: Partial<InputSettings>;
+	tel: Partial<InputSettings>;
+	email: Partial<InputSettings>;
+}
