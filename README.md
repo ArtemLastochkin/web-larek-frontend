@@ -355,16 +355,21 @@ yarn build
 - total(value: number) - свойство-сеттер устанавливает текстовое значение для HTML элемента в свойстве totalPriceElement
 
 ## Типы данных
+
+Тип данных карточки является основным типом в приложении
 ```
 type Card = {
-id: string;
+id: string; 
 description: string;
 image: string;
 title: string;
 category: string;
 price: number | null;
 };
+```
 
+Интерфейс описывает класс UserDataModel
+```
 interface IUserDataModel {
 setIdItems(value: string[]): void
 setPayment(value: string): void
@@ -375,6 +380,7 @@ setTotal(value: string | number | null): void
 checkPayment(): boolean
 clearProperty(): void
 }
+```
 
 interface ICard {
 total: number;
@@ -445,9 +451,10 @@ email: Partial<InputSettings>;
 interface Success {
 total: number;
 }
-```
 
+```
 type ResponseApiPost = Success & { id: Pick<Card, `id`> };
+```
 
 ## Краткое описание работы приложения
 
