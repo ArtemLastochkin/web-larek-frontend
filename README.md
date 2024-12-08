@@ -153,7 +153,7 @@ yarn build
 
 - items: string[] - Поле хранит массив состоящий из id товаров из корзины
 
-  Методы класса:
+Методы класса:
 
 - setIdItems(value: string[]): void - Принимает на вход массив из id товаров и присваивает значению свойству items
 
@@ -355,15 +355,15 @@ yarn build
 - total(value: number) - свойство-сеттер устанавливает текстовое значение для HTML элемента в свойстве totalPriceElement
 
 ## Типы данных
-
-> type Card = {
-> id: string;
-> description: string;
-> image: string;
-> title: string;
-> category: string;
-> price: number | null;
-> };
+```
+type Card = {
+id: string;
+description: string;
+image: string;
+title: string;
+category: string;
+price: number | null;
+};
 
 interface IUserDataModel {
 setIdItems(value: string[]): void
@@ -445,6 +445,7 @@ email: Partial<InputSettings>;
 interface Success {
 total: number;
 }
+```
 
 type ResponseApiPost = Success & { id: Pick<Card, `id`> };
 
