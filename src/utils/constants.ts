@@ -8,7 +8,6 @@ export const settings = {
 	orderApi: `/order`,
 
 	mainGallery: `.gallery`,
-	galleryItem: `.gallery__item`,
 
 	modalContainer: `#modal-container`,
 	modal: `.modal`,
@@ -21,21 +20,18 @@ export const settings = {
 	headerBasketCounterSpan: `.header__basket-counter`,
 
 	modalBasket: `.basket`,
-	basketItem: `.basket__item`,
 	basketList: `.basket__list`,
 	basketItemIndex: `.basket__item-index`,
 	basketPrice: `.basket__price`,
 	basketItemDelete: `.basket__item-delete`,
 	basketButton: `.basket__button`,
 
-	templateCard: `#card-catalog`,
 	categorySelector: `.card__category`,
 	titleSelector: `.card__title`,
 	imageSelector: `.card__image`,
 	priceSelector: `.card__price`,
 	textSelector: `.card__text`,
 	buttonSelector: `.card__button`,
-	modalPreview: `.card_full`,
 
 	orderButtons: `.order__buttons`,
 	orderField: `.order__field`,
@@ -65,9 +61,10 @@ export const settings = {
 		email: { required: true, typeEmail: `email` },
 	},
 
-  orderSuccessDescription: `.order-success__description`,
-  orderSuccessClose: `.order-success__close`,
+	orderSuccessDescription: `.order-success__description`,
+	orderSuccessClose: `.order-success__close`,
 
+	templateCard: `#card-catalog`,
 	templateSuccess: `#success`,
 	templateCardPreview: `#card-preview`,
 	templateCardBasket: `#card-basket`,
