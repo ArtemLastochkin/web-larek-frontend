@@ -22,7 +22,7 @@ export class SuccessUI extends Component<Success> implements Success {
 		) as HTMLButtonElement;
 
 		this.orderSuccessCloseElement.addEventListener(`click`, () => {
-			event.emit(`success:clickClose`);
+			event.emit(`popup:close`);
 		});
 	}
 

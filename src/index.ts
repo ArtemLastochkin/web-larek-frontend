@@ -84,7 +84,6 @@ eventEmitter.on(`basket:changeList`, () => {
 	const itemsBasketBoolean = basketModel.checkItems();
 	basketUI.render({ itemsBasketBoolean });
 	const basketDataCards = basketModel.getProductList();
-
 	const elementsBasket = basketDataCards.map((element, itemIndex) => {
 		const cardExample = new CardBasketUI(
 			cloneTemplate(settings.templateCardBasket),
@@ -236,18 +235,18 @@ eventEmitter.on<{
 // событий sumbit контактов
 eventEmitter.on<{ evt: Event }>(`contact:submit`, ({ evt }) => {
 	evt.preventDefault();
-	api.post(settings.orderApi, userDataModel).then((res: ResponseApiPost) => {
-		basketModel.clear();
-		const success = new SuccessUI(
-			cloneTemplate(settings.templateSuccess),
-			eventEmitter
-		);
-		const successElement = success.render({ total: res.total });
-		popup.setContent(successElement);
-	});
-});
-
-// событие нажатия на кнопку success
-eventEmitter.on(`success:clickClose`, () => {
-	popup.closePopup();
+	api
+		.post(settings.orderApi, userDataModel)
+		.then((res: ResponseApiPost) => {
+			basketModel.clear();
+			const success = new SuccessUI(
+				cloneTemplate(settings.templateSuccess),
+				eventEmitter
+			);
+			const successElement = success.render({ total: res.total });
+			popup.setContent(successElement);
+		})
+		.catch((err) => {
+			console.log(err);
+		});
 });
