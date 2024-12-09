@@ -159,10 +159,12 @@ eventEmitter.on<{
 	otherButton: HTMLButtonElement;
 	errorElement: HTMLElement;
 	orderButton: HTMLButtonElement;
+	method: Function
 }>(
 	`payment:click`,
-	({ payment, buttonClick, otherButton, errorElement, orderButton }) => {
+	({ payment, buttonClick, otherButton, errorElement, orderButton, method }) => {
 		userDataModel.setPayment(payment);
+		method(errorElement, `Привет`)
 		if (
 			payment === settings.onlinePayment ||
 			payment === settings.offlinePayment
