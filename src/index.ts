@@ -141,18 +141,19 @@ eventEmitter.on<{
 	input: HTMLInputElement;
 	errorElement: HTMLElement;
 	orderButton: HTMLButtonElement;
-	methodSetText(element: HTMLElement, value: unknown): void
-}>(`payment:input`, ({ input, errorElement, orderButton, methodSetText }) => {
+	methodSetText(element: HTMLElement, value: unknown): void;
+	methodSetDisabled(element: HTMLElement, state: boolean): void
+}>(`payment:input`, ({ input, errorElement, orderButton, methodSetText, methodSetDisabled }) => {
 	userDataModel.setAddress(input.value);
 	if (!input.validity.valid) {
 		methodSetText(errorElement, settings.textError.requiredAddress)
-		orderButton.disabled = true;
+		methodSetDisabled(orderButton, true);
 	} else if (input.validity.valid && userDataModel.checkPayment()) {
 		methodSetText(errorElement, settings.textError.nonError)
-		orderButton.disabled = false;
+		methodSetDisabled(orderButton, false);
 	} else if (input.validity.valid && !userDataModel.checkPayment()) {
 		methodSetText(errorElement, settings.textError.typePayment)
-		orderButton.disabled = true;
+		methodSetDisabled(orderButton, true);
 	}
 });
 
@@ -163,10 +164,11 @@ eventEmitter.on<{
 	otherButton: HTMLButtonElement;
 	errorElement: HTMLElement;
 	orderButton: HTMLButtonElement;
-	methodSetText(element: HTMLElement, value: unknown): void
+	methodSetText(element: HTMLElement, value: unknown): void;
+	methodSetDisabled(element: HTMLElement, state: boolean): void
 }>(
 	`payment:click`,
-	({ payment, buttonClick, otherButton, errorElement, orderButton, methodSetText }) => {
+	({ payment, buttonClick, otherButton, errorElement, orderButton, methodSetText, methodSetDisabled }) => {
 		userDataModel.setPayment(payment);
 		if (
 			payment === settings.onlinePayment ||
@@ -177,10 +179,10 @@ eventEmitter.on<{
 		}
 		if (userDataModel.checkPayment()) {
 			methodSetText(errorElement, settings.textError.nonError)
-			orderButton.disabled = false;
+			methodSetDisabled(orderButton, false);
 		} else {
 			methodSetText(errorElement, settings.textError.requiredAddress)
-			orderButton.disabled = true;
+			methodSetDisabled(orderButton, true);
 		}
 	}
 );
@@ -203,37 +205,38 @@ eventEmitter.on<{
 	form: HTMLFormElement;
 	orderButton: HTMLButtonElement;
 	errorElement: HTMLSpanElement;
-	methodSetText(element: HTMLElement, value: unknown): void
-}>(`contact:input`, ({ evtTarget, form, orderButton, errorElement, methodSetText }) => {
+	methodSetText(element: HTMLElement, value: unknown): void;
+	methodSetDisabled(element: HTMLElement, state: boolean): void
+}>(`contact:input`, ({ evtTarget, form, orderButton, errorElement, methodSetText, methodSetDisabled }) => {
 	if (evtTarget.getAttribute(`name`) === `email`) {
 		userDataModel.setEmail(evtTarget.value);
 		if (!evtTarget.checkValidity()) {
 			methodSetText(errorElement, evtTarget.validationMessage) 
-			orderButton.disabled = true;
+			methodSetDisabled(orderButton, true);
 		} else if (evtTarget.checkValidity() && !form.checkValidity()) {
 			methodSetText(errorElement, settings.textError.requiredTel) 
-			orderButton.disabled = true;
+			methodSetDisabled(orderButton, true);
 		} else if (evtTarget.checkValidity() && form.checkValidity()) {
 			methodSetText(errorElement, settings.textError.nonError)
-			orderButton.disabled = false;
+			methodSetDisabled(orderButton, false);
 		}
 	} else if (evtTarget.getAttribute(`name`) === `phone`) {
 		userDataModel.setPhone(evtTarget.value);
 		if (!evtTarget.checkValidity()) {
 			methodSetText(errorElement, settings.textError.requiredTel)
-			orderButton.disabled = true;
+			methodSetDisabled(orderButton, true);
 		} else if (evtTarget.checkValidity() && !form.checkValidity()) {
 			methodSetText(errorElement, settings.textError.requiredEmail)
-			orderButton.disabled = true;
+			methodSetDisabled(orderButton, true);
 		} else if (evtTarget.checkValidity() && form.checkValidity()) {
 			methodSetText(errorElement, settings.textError.nonError)
-			orderButton.disabled = false;
+			methodSetDisabled(orderButton, false);
 		}
 		if (form.checkValidity()) {
 			methodSetText(errorElement, settings.textError.nonError)
-			orderButton.disabled = false;
+			methodSetDisabled(orderButton, false);
 		} else {
-			orderButton.disabled = true;
+			methodSetDisabled(orderButton, true);
 		}
 	}
 });
