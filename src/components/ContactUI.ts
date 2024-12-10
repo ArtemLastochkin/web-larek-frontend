@@ -8,8 +8,8 @@ export class ContactUI extends FormUI implements IContactUI {
 	protected inputTelElement: HTMLInputElement;
 	protected inputEmailElement: HTMLInputElement;
 
-	constructor(container: HTMLTemplateElement, event: IEvents) {
-		super(container);
+	constructor(container: HTMLFormElement, event: IEvents) {
+		super(container, event);
 		this.inputTelElement = ensureElement(
 			settings.namePhone,
 			this.container
@@ -18,23 +18,6 @@ export class ContactUI extends FormUI implements IContactUI {
 			settings.nameEmail,
 			this.container
 		) as HTMLInputElement;
-
-		this.container.addEventListener(`input`, (evt: Event) => {
-			const evtTarget = evt.target as HTMLInputElement;
-			const form = this.container as HTMLFormElement;
-			event.emit(`contact:input`, {
-				evtTarget: evtTarget,
-				form: form,
-				orderButton: this.orderButton,
-				errorElement: this.errorElement,
-				methodSetText: this.setText,
-				methodSetDisabled: this.setDisabled
-			});
-		});
-
-		this.container.addEventListener(`submit`, (evt: Event) => {
-			event.emit(`contact:submit`, { evt: evt });
-		});
 	}
 
 	set email(value: InputSettings) {

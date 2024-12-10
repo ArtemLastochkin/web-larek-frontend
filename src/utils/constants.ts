@@ -33,6 +33,7 @@ export const settings = {
 	textSelector: `.card__text`,
 	buttonSelector: `.card__button`,
 
+	formSelector: `.form`,
 	orderButtons: `.order__buttons`,
 	orderField: `.order__field`,
 	nameCardButton: ` [name="card"]`,
@@ -43,7 +44,7 @@ export const settings = {
 	formErrors: `.form__errors`,
 	textError: {
 		nonError: ``,
-		typePayment: `Выбирите тип оплаты`,
+		typePayment: `Выберите тип оплаты`,
 		requiredAddress: `Заполните адрес`,
 		requiredAll: `Заполните все обязательные поля`,
 		requiredTel: `Заполните номер телефона, номер должен содержать только цифры и начинаться с "+7"`,

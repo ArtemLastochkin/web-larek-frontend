@@ -9,8 +9,8 @@ export class PaymentUI extends FormUI implements IPayment {
 	protected cashButton: HTMLButtonElement;
 	protected addressInput: HTMLInputElement;
 
-	constructor(container: HTMLTemplateElement, event: IEvents) {
-		super(container);
+	constructor(container: HTMLFormElement, event: IEvents) {
+		super(container, event);
 		this.cardButton = ensureElement(
 			settings.orderButtons + settings.nameCardButton,
 			container
@@ -33,9 +33,9 @@ export class PaymentUI extends FormUI implements IPayment {
 				buttonClick: evtTarget,
 				otherButton: this.cashButton,
 				errorElement: this.errorElement,
-				orderButton: this.orderButton,
+				submitButton: this.submitButton,
 				methodSetText: this.setText,
-				methodSetDisabled: this.setDisabled
+				methodSetDisabled: this.setDisabled,
 			});
 		});
 
@@ -46,25 +46,10 @@ export class PaymentUI extends FormUI implements IPayment {
 				buttonClick: evtTarget,
 				otherButton: this.cardButton,
 				errorElement: this.errorElement,
-				orderButton: this.orderButton,
+				submitButton: this.submitButton,
 				methodSetText: this.setText,
-				methodSetDisabled: this.setDisabled
+				methodSetDisabled: this.setDisabled,
 			});
-		});
-
-		this.addressInput.addEventListener(`input`, (evt: Event) => {
-			const evtTarget = evt.target as HTMLInputElement;
-			event.emit(`payment:input`, {
-				input: evtTarget,
-				errorElement: this.errorElement,
-				orderButton: this.orderButton,
-				methodSetText: this.setText,
-				methodSetDisabled: this.setDisabled
-			});
-		});
-
-		this.container.addEventListener(`submit`, (evt: Event) => {
-			event.emit(`payment:clickSubmit`, { evt });
 		});
 	}
 

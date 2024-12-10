@@ -122,7 +122,7 @@ eventEmitter.on(`headerBasketButton:click`, () => {
 	userDataModel.clearProperty();
 });
 
-// клик по кнопке оформить в корзине
+// // клик по кнопке оформить в корзине
 eventEmitter.on(`basket:sendList`, () => {
 	const items = basketModel.getProductList().map((element) => {
 		return element.id;
@@ -136,39 +136,50 @@ eventEmitter.on(`basket:sendList`, () => {
 	popup.setContent(paymentExample.render(settings.inputSetting));
 });
 
-// событие ввода адреса в форме оплаты
+// // событие ввода адреса в форме оплаты
 eventEmitter.on<{
 	input: HTMLInputElement;
 	errorElement: HTMLElement;
-	orderButton: HTMLButtonElement;
+	submitButton: HTMLButtonElement;
 	methodSetText(element: HTMLElement, value: unknown): void;
-	methodSetDisabled(element: HTMLElement, state: boolean): void
-}>(`payment:input`, ({ input, errorElement, orderButton, methodSetText, methodSetDisabled }) => {
-	userDataModel.setAddress(input.value);
-	if (!input.validity.valid) {
-		methodSetText(errorElement, settings.textError.requiredAddress)
-		methodSetDisabled(orderButton, true);
-	} else if (input.validity.valid && userDataModel.checkPayment()) {
-		methodSetText(errorElement, settings.textError.nonError)
-		methodSetDisabled(orderButton, false);
-	} else if (input.validity.valid && !userDataModel.checkPayment()) {
-		methodSetText(errorElement, settings.textError.typePayment)
-		methodSetDisabled(orderButton, true);
+	methodSetDisabled(element: HTMLElement, state: boolean): void;
+}>(
+	`order.address:change`,
+	({ input, errorElement, submitButton, methodSetText, methodSetDisabled }) => {
+		userDataModel.setAddress(input.value);
+		if (!input.validity.valid) {
+			methodSetText(errorElement, settings.textError.requiredAddress);
+			methodSetDisabled(submitButton, true);
+		} else if (input.validity.valid && userDataModel.checkPayment()) {
+			methodSetText(errorElement, settings.textError.nonError);
+			methodSetDisabled(submitButton, false);
+		} else if (input.validity.valid && !userDataModel.checkPayment()) {
+			methodSetText(errorElement, settings.textError.typePayment);
+			methodSetDisabled(submitButton, true);
+		}
 	}
-});
+);
 
-// событие выбор оплаты
+// // событие выбор оплаты
 eventEmitter.on<{
 	payment: string;
 	buttonClick: HTMLButtonElement;
 	otherButton: HTMLButtonElement;
 	errorElement: HTMLElement;
-	orderButton: HTMLButtonElement;
+	submitButton: HTMLButtonElement;
 	methodSetText(element: HTMLElement, value: unknown): void;
-	methodSetDisabled(element: HTMLElement, state: boolean): void
+	methodSetDisabled(element: HTMLElement, state: boolean): void;
 }>(
 	`payment:click`,
-	({ payment, buttonClick, otherButton, errorElement, orderButton, methodSetText, methodSetDisabled }) => {
+	({
+		payment,
+		buttonClick,
+		otherButton,
+		errorElement,
+		submitButton,
+		methodSetText,
+		methodSetDisabled,
+	}) => {
 		userDataModel.setPayment(payment);
 		if (
 			payment === settings.onlinePayment ||
@@ -178,20 +189,17 @@ eventEmitter.on<{
 			otherButton.classList.toggle(`button_alt-active`, false);
 		}
 		if (userDataModel.checkPayment()) {
-			methodSetText(errorElement, settings.textError.nonError)
-			methodSetDisabled(orderButton, false);
+			methodSetText(errorElement, settings.textError.nonError);
+			methodSetDisabled(submitButton, false);
 		} else {
-			methodSetText(errorElement, settings.textError.requiredAddress)
-			methodSetDisabled(orderButton, true);
+			methodSetText(errorElement, settings.textError.requiredAddress);
+			methodSetDisabled(submitButton, true);
 		}
 	}
 );
 
-// событие отправки формы оплаты
-eventEmitter.on<{
-	evt: Event;
-}>(`payment:clickSubmit`, ({ evt }) => {
-	evt.preventDefault();
+// // событие отправки формы оплаты
+eventEmitter.on(`order:submit`, () => {
 	const contactExample = new ContactUI(
 		cloneTemplate(settings.templateContacts),
 		eventEmitter
@@ -199,51 +207,78 @@ eventEmitter.on<{
 	popup.setContent(contactExample.render(settings.inputSetting));
 });
 
-// событие ввода контактов
+// // событие ввода email
 eventEmitter.on<{
-	evtTarget: HTMLInputElement;
 	form: HTMLFormElement;
-	orderButton: HTMLButtonElement;
-	errorElement: HTMLSpanElement;
+	input: HTMLInputElement;
+	errorElement: HTMLElement;
+	submitButton: HTMLButtonElement;
 	methodSetText(element: HTMLElement, value: unknown): void;
-	methodSetDisabled(element: HTMLElement, state: boolean): void
-}>(`contact:input`, ({ evtTarget, form, orderButton, errorElement, methodSetText, methodSetDisabled }) => {
-	if (evtTarget.getAttribute(`name`) === `email`) {
-		userDataModel.setEmail(evtTarget.value);
-		if (!evtTarget.checkValidity()) {
-			methodSetText(errorElement, evtTarget.validationMessage) 
-			methodSetDisabled(orderButton, true);
-		} else if (evtTarget.checkValidity() && !form.checkValidity()) {
-			methodSetText(errorElement, settings.textError.requiredTel) 
-			methodSetDisabled(orderButton, true);
-		} else if (evtTarget.checkValidity() && form.checkValidity()) {
-			methodSetText(errorElement, settings.textError.nonError)
-			methodSetDisabled(orderButton, false);
-		}
-	} else if (evtTarget.getAttribute(`name`) === `phone`) {
-		userDataModel.setPhone(evtTarget.value);
-		if (!evtTarget.checkValidity()) {
-			methodSetText(errorElement, settings.textError.requiredTel)
-			methodSetDisabled(orderButton, true);
-		} else if (evtTarget.checkValidity() && !form.checkValidity()) {
-			methodSetText(errorElement, settings.textError.requiredEmail)
-			methodSetDisabled(orderButton, true);
-		} else if (evtTarget.checkValidity() && form.checkValidity()) {
-			methodSetText(errorElement, settings.textError.nonError)
-			methodSetDisabled(orderButton, false);
-		}
-		if (form.checkValidity()) {
-			methodSetText(errorElement, settings.textError.nonError)
-			methodSetDisabled(orderButton, false);
-		} else {
-			methodSetDisabled(orderButton, true);
+	methodSetDisabled(element: HTMLElement, state: boolean): void;
+}>(
+	`contacts.email:change`,
+	({
+		form,
+		input,
+		errorElement,
+		submitButton,
+		methodSetText,
+		methodSetDisabled,
+	}) => {
+		userDataModel.setEmail(input.value);
+		if (!input.checkValidity()) {
+			methodSetText(errorElement, input.validationMessage);
+			methodSetDisabled(submitButton, true);
+		} else if (input.checkValidity() && !form.checkValidity()) {
+			methodSetText(errorElement, settings.textError.requiredTel);
+			methodSetDisabled(submitButton, true);
+		} else if (input.checkValidity() && form.checkValidity()) {
+			methodSetText(errorElement, settings.textError.nonError);
+			methodSetDisabled(submitButton, false);
 		}
 	}
-});
+);
+
+// событие ввода телефона
+eventEmitter.on<{
+	form: HTMLFormElement;
+	input: HTMLInputElement;
+	errorElement: HTMLElement;
+	submitButton: HTMLButtonElement;
+	methodSetText(element: HTMLElement, value: unknown): void;
+	methodSetDisabled(element: HTMLElement, state: boolean): void;
+}>(
+	`contacts.phone:change`,
+	({
+		form,
+		input,
+		errorElement,
+		submitButton,
+		methodSetText,
+		methodSetDisabled,
+	}) => {
+		userDataModel.setPhone(input.value);
+		if (!input.checkValidity()) {
+			methodSetText(errorElement, settings.textError.requiredTel);
+			methodSetDisabled(submitButton, true);
+		} else if (input.checkValidity() && !form.checkValidity()) {
+			methodSetText(errorElement, settings.textError.requiredEmail);
+			methodSetDisabled(submitButton, true);
+		} else if (input.checkValidity() && form.checkValidity()) {
+			methodSetText(errorElement, settings.textError.nonError);
+			methodSetDisabled(submitButton, false);
+		}
+		if (form.checkValidity()) {
+			methodSetText(errorElement, settings.textError.nonError);
+			methodSetDisabled(submitButton, false);
+		} else {
+			methodSetDisabled(submitButton, true);
+		}
+	}
+);
 
 // событие sumbit контактов
-eventEmitter.on<{ evt: Event }>(`contact:submit`, ({ evt }) => {
-	evt.preventDefault();
+eventEmitter.on(`contacts:submit`, () => {
 	api
 		.post(settings.orderApi, userDataModel)
 		.then((res: ResponseApiPost) => {
