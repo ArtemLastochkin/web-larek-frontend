@@ -29,6 +29,14 @@ export abstract class FormUI extends Component<InputSetting> {
 		});
 	}
 
+	protected changeActivitySubmit = (value: boolean = true) => {
+		this.setDisabled(this.submitButton, value);
+	};
+
+	protected changeTextError = (value: string = ``) => {
+		this.setText(this.errorElement, value);
+	};
+
 	protected onInputChange(
 		nameInp: string,
 		input: HTMLInputElement,
@@ -37,10 +45,8 @@ export abstract class FormUI extends Component<InputSetting> {
 		this.events.emit(`${this.container.name}.${String(nameInp)}:change`, {
 			form,
 			input,
-			errorElement: this.errorElement,
-			submitButton: this.submitButton,
-			methodSetText: this.setText,
-			methodSetDisabled: this.setDisabled,
+			changeTextError: this.changeTextError,
+			changeActivitySubmit: this.changeActivitySubmit,
 		});
 	}
 }

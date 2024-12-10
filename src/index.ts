@@ -41,7 +41,7 @@ api
 	.then((res: ApiListResponse<Card>) => {
 		cardModel.setData(res);
 	})
-	.catch((err) => console.log(err));
+	.catch(console.error);
 
 // =================обработчики событий=================
 // загрузка карточек страницы
@@ -139,23 +139,21 @@ eventEmitter.on(EventsName.SendBasketList, () => {
 // событие ввода адреса в форме оплаты
 eventEmitter.on<{
 	input: HTMLInputElement;
-	errorElement: HTMLElement;
-	submitButton: HTMLButtonElement;
-	methodSetText(element: HTMLElement, value: unknown): void;
-	methodSetDisabled(element: HTMLElement, state: boolean): void;
+	changeTextError: (value?: string) => void;
+	changeActivitySubmit: (value?: boolean) => void;
 }>(
 	EventsName.AddressChange,
-	({ input, errorElement, submitButton, methodSetText, methodSetDisabled }) => {
+	({ input, changeTextError, changeActivitySubmit }) => {
 		userDataModel.setAddress(input.value);
 		if (!input.validity.valid) {
-			methodSetText(errorElement, settings.textError.requiredAddress);
-			methodSetDisabled(submitButton, true);
+			changeTextError(settings.textError.requiredAddress);
+			changeActivitySubmit();
 		} else if (input.validity.valid && userDataModel.checkPayment()) {
-			methodSetText(errorElement, settings.textError.nonError);
-			methodSetDisabled(submitButton, false);
+			changeTextError();
+			changeActivitySubmit(false);
 		} else if (input.validity.valid && !userDataModel.checkPayment()) {
-			methodSetText(errorElement, settings.textError.typePayment);
-			methodSetDisabled(submitButton, true);
+			changeTextError(settings.textError.typePayment);
+			changeActivitySubmit();
 		}
 	}
 );
@@ -165,35 +163,37 @@ eventEmitter.on<{
 	payment: string;
 	buttonClick: HTMLButtonElement;
 	otherButton: HTMLButtonElement;
-	errorElement: HTMLElement;
-	submitButton: HTMLButtonElement;
-	methodSetText(element: HTMLElement, value: unknown): void;
-	methodSetDisabled(element: HTMLElement, state: boolean): void;
+	changeTextError: (value?: string) => void;
+	methodToggleClass(
+		element: HTMLElement,
+		className: string,
+		force?: boolean
+	): void;
+	changeActivitySubmit: (value?: boolean) => void;
 }>(
 	EventsName.PaymentSelection,
 	({
 		payment,
 		buttonClick,
 		otherButton,
-		errorElement,
-		submitButton,
-		methodSetText,
-		methodSetDisabled,
+		changeTextError,
+		methodToggleClass,
+		changeActivitySubmit,
 	}) => {
 		userDataModel.setPayment(payment);
 		if (
 			payment === settings.onlinePayment ||
 			payment === settings.offlinePayment
 		) {
-			buttonClick.classList.toggle(`button_alt-active`, true);
-			otherButton.classList.toggle(`button_alt-active`, false);
+			methodToggleClass(buttonClick, `button_alt-active`, true);
+			methodToggleClass(otherButton, `button_alt-active`, false);
 		}
 		if (userDataModel.checkPayment()) {
-			methodSetText(errorElement, settings.textError.nonError);
-			methodSetDisabled(submitButton, false);
+			changeTextError();
+			changeActivitySubmit(false);
 		} else {
-			methodSetText(errorElement, settings.textError.requiredAddress);
-			methodSetDisabled(submitButton, true);
+			changeTextError(settings.textError.requiredAddress);
+			changeActivitySubmit();
 		}
 	}
 );
@@ -211,30 +211,21 @@ eventEmitter.on(EventsName.PaymentSubmit, () => {
 eventEmitter.on<{
 	form: HTMLFormElement;
 	input: HTMLInputElement;
-	errorElement: HTMLElement;
-	submitButton: HTMLButtonElement;
-	methodSetText(element: HTMLElement, value: unknown): void;
-	methodSetDisabled(element: HTMLElement, state: boolean): void;
+	changeTextError: (value?: string) => void;
+	changeActivitySubmit: (value?: boolean) => void;
 }>(
 	EventsName.EmailChange,
-	({
-		form,
-		input,
-		errorElement,
-		submitButton,
-		methodSetText,
-		methodSetDisabled,
-	}) => {
+	({ form, input, changeTextError, changeActivitySubmit }) => {
 		userDataModel.setEmail(input.value);
 		if (!input.checkValidity()) {
-			methodSetText(errorElement, input.validationMessage);
-			methodSetDisabled(submitButton, true);
+			changeTextError(input.validationMessage);
+			changeActivitySubmit();
 		} else if (input.checkValidity() && !form.checkValidity()) {
-			methodSetText(errorElement, settings.textError.requiredTel);
-			methodSetDisabled(submitButton, true);
+			changeTextError(settings.textError.requiredTel);
+			changeActivitySubmit();
 		} else if (input.checkValidity() && form.checkValidity()) {
-			methodSetText(errorElement, settings.textError.nonError);
-			methodSetDisabled(submitButton, false);
+			changeTextError();
+			changeActivitySubmit(false);
 		}
 	}
 );
@@ -243,36 +234,27 @@ eventEmitter.on<{
 eventEmitter.on<{
 	form: HTMLFormElement;
 	input: HTMLInputElement;
-	errorElement: HTMLElement;
-	submitButton: HTMLButtonElement;
-	methodSetText(element: HTMLElement, value: unknown): void;
-	methodSetDisabled(element: HTMLElement, state: boolean): void;
+	changeTextError: (value?: string) => void;
+	changeActivitySubmit: (value?: boolean) => void;
 }>(
 	EventsName.PhoneChange,
-	({
-		form,
-		input,
-		errorElement,
-		submitButton,
-		methodSetText,
-		methodSetDisabled,
-	}) => {
+	({ form, input, changeTextError, changeActivitySubmit }) => {
 		userDataModel.setPhone(input.value);
 		if (!input.checkValidity()) {
-			methodSetText(errorElement, settings.textError.requiredTel);
-			methodSetDisabled(submitButton, true);
+			changeTextError(settings.textError.requiredTel);
+			changeActivitySubmit();
 		} else if (input.checkValidity() && !form.checkValidity()) {
-			methodSetText(errorElement, settings.textError.requiredEmail);
-			methodSetDisabled(submitButton, true);
+			changeTextError(settings.textError.requiredEmail);
+			changeActivitySubmit();
 		} else if (input.checkValidity() && form.checkValidity()) {
-			methodSetText(errorElement, settings.textError.nonError);
-			methodSetDisabled(submitButton, false);
+			changeTextError();
+			changeActivitySubmit(false);
 		}
 		if (form.checkValidity()) {
-			methodSetText(errorElement, settings.textError.nonError);
-			methodSetDisabled(submitButton, false);
+			changeTextError();
+			changeActivitySubmit(false);
 		} else {
-			methodSetDisabled(submitButton, true);
+			changeActivitySubmit();
 		}
 	}
 );
@@ -290,7 +272,5 @@ eventEmitter.on(EventsName.ContactsSubmit, () => {
 			const successElement = success.render({ total: res.total });
 			popup.setContent(successElement);
 		})
-		.catch((err) => {
-			console.log(err);
-		});
+		.catch(console.error);
 });

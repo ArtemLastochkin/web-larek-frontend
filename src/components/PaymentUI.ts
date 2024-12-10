@@ -32,10 +32,9 @@ export class PaymentUI extends FormUI implements IPayment {
 				payment: settings.onlinePayment,
 				buttonClick: evtTarget,
 				otherButton: this.cashButton,
-				errorElement: this.errorElement,
-				submitButton: this.submitButton,
-				methodSetText: this.setText,
-				methodSetDisabled: this.setDisabled,
+				changeTextError: this.changeTextError,
+				methodToggleClass: this.toggleClass,
+				changeActivitySubmit: this.changeActivitySubmit
 			});
 		});
 
@@ -45,10 +44,9 @@ export class PaymentUI extends FormUI implements IPayment {
 				payment: settings.offlinePayment,
 				buttonClick: evtTarget,
 				otherButton: this.cardButton,
-				errorElement: this.errorElement,
-				submitButton: this.submitButton,
-				methodSetText: this.setText,
-				methodSetDisabled: this.setDisabled,
+				changeTextError: this.changeTextError,
+				methodToggleClass: this.toggleClass,
+				changeActivitySubmit: this.changeActivitySubmit
 			});
 		});
 	}

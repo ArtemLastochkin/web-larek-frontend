@@ -75,8 +75,8 @@ export const settings = {
 };
 
 /**
-* Названия событий
-*/
+ * Названия событий
+ */
 export enum EventsName {
 	LoadPage = `loaded:page`,
 	CardClick = `card:click`,
@@ -91,5 +91,5 @@ export enum EventsName {
 	PaymentSubmit = `order:submit`,
 	EmailChange = `contacts.email:change`,
 	PhoneChange = `contacts.phone:change`,
-	ContactsSubmit = `contacts:submit`
+	ContactsSubmit = `contacts:submit`,
 }

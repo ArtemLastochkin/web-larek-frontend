@@ -10,7 +10,7 @@ export class Popup extends Component<object> implements IPopup {
 	protected modalCloseButton: HTMLButtonElement;
 
 	constructor(modalContainer: HTMLElement, eventEmitter: IEvents) {
-		super(modalContainer)
+		super(modalContainer);
 		this.modalContainer = modalContainer;
 		this.modalContent = ensureElement(
 			settings.modalContent,
@@ -34,11 +34,13 @@ export class Popup extends Component<object> implements IPopup {
 	}
 
 	closePopup() {
-		this.modalContainer.classList.remove(settings.modalActiveClass);
+		this.toggleClass(this.modalContainer, settings.modalActiveClass, false);
+		document.removeEventListener(`keydown`, this.closePopupEsc);
 	}
 
 	openPopup() {
-		this.modalContainer.classList.add(settings.modalActiveClass);
+		this.toggleClass(this.modalContainer, settings.modalActiveClass, true);
+		document.addEventListener(`keydown`, this.closePopupEsc);
 	}
 
 	clearContentPopup() {
@@ -48,4 +50,10 @@ export class Popup extends Component<object> implements IPopup {
 	setContent(value: HTMLElement) {
 		this.modalContent.replaceChildren(value);
 	}
+
+	protected closePopupEsc = (evt: KeyboardEvent) => {
+		if (evt.key === `Escape`) {
+			this.closePopup();
+		}
+	};
 }
