@@ -141,16 +141,17 @@ eventEmitter.on<{
 	input: HTMLInputElement;
 	errorElement: HTMLElement;
 	orderButton: HTMLButtonElement;
-}>(`payment:input`, ({ input, errorElement, orderButton }) => {
+	methodSetText(element: HTMLElement, value: unknown): void
+}>(`payment:input`, ({ input, errorElement, orderButton, methodSetText }) => {
 	userDataModel.setAddress(input.value);
 	if (!input.validity.valid) {
-		errorElement.textContent = settings.textError.requiredAddress;
+		methodSetText(errorElement, settings.textError.requiredAddress)
 		orderButton.disabled = true;
 	} else if (input.validity.valid && userDataModel.checkPayment()) {
-		errorElement.textContent = settings.textError.nonError;
+		methodSetText(errorElement, settings.textError.nonError)
 		orderButton.disabled = false;
 	} else if (input.validity.valid && !userDataModel.checkPayment()) {
-		errorElement.textContent = settings.textError.typePayment;
+		methodSetText(errorElement, settings.textError.typePayment)
 		orderButton.disabled = true;
 	}
 });
@@ -162,9 +163,10 @@ eventEmitter.on<{
 	otherButton: HTMLButtonElement;
 	errorElement: HTMLElement;
 	orderButton: HTMLButtonElement;
+	methodSetText(element: HTMLElement, value: unknown): void
 }>(
 	`payment:click`,
-	({ payment, buttonClick, otherButton, errorElement, orderButton }) => {
+	({ payment, buttonClick, otherButton, errorElement, orderButton, methodSetText }) => {
 		userDataModel.setPayment(payment);
 		if (
 			payment === settings.onlinePayment ||
@@ -174,11 +176,11 @@ eventEmitter.on<{
 			otherButton.classList.toggle(`button_alt-active`, false);
 		}
 		if (userDataModel.checkPayment()) {
-			errorElement.textContent = settings.textError.nonError;
+			methodSetText(errorElement, settings.textError.nonError)
 			orderButton.disabled = false;
 		} else {
+			methodSetText(errorElement, settings.textError.requiredAddress)
 			orderButton.disabled = true;
-			errorElement.textContent = settings.textError.requiredAddress;
 		}
 	}
 );
@@ -201,33 +203,34 @@ eventEmitter.on<{
 	form: HTMLFormElement;
 	orderButton: HTMLButtonElement;
 	errorElement: HTMLSpanElement;
-}>(`contact:input`, ({ evtTarget, form, orderButton, errorElement }) => {
+	methodSetText(element: HTMLElement, value: unknown): void
+}>(`contact:input`, ({ evtTarget, form, orderButton, errorElement, methodSetText }) => {
 	if (evtTarget.getAttribute(`name`) === `email`) {
 		userDataModel.setEmail(evtTarget.value);
 		if (!evtTarget.checkValidity()) {
-			errorElement.textContent = evtTarget.validationMessage;
+			methodSetText(errorElement, evtTarget.validationMessage) 
 			orderButton.disabled = true;
 		} else if (evtTarget.checkValidity() && !form.checkValidity()) {
-			errorElement.textContent = settings.textError.requiredTel;
+			methodSetText(errorElement, settings.textError.requiredTel) 
 			orderButton.disabled = true;
 		} else if (evtTarget.checkValidity() && form.checkValidity()) {
-			errorElement.textContent = settings.textError.nonError;
+			methodSetText(errorElement, settings.textError.nonError)
 			orderButton.disabled = false;
 		}
 	} else if (evtTarget.getAttribute(`name`) === `phone`) {
 		userDataModel.setPhone(evtTarget.value);
 		if (!evtTarget.checkValidity()) {
-			errorElement.textContent = settings.textError.requiredTel;
+			methodSetText(errorElement, settings.textError.requiredTel)
 			orderButton.disabled = true;
 		} else if (evtTarget.checkValidity() && !form.checkValidity()) {
-			errorElement.textContent = settings.textError.requiredEmail;
+			methodSetText(errorElement, settings.textError.requiredEmail)
 			orderButton.disabled = true;
 		} else if (evtTarget.checkValidity() && form.checkValidity()) {
-			errorElement.textContent = settings.textError.nonError;
+			methodSetText(errorElement, settings.textError.nonError)
 			orderButton.disabled = false;
 		}
 		if (form.checkValidity()) {
-			errorElement.textContent = settings.textError.nonError;
+			methodSetText(errorElement, settings.textError.nonError)
 			orderButton.disabled = false;
 		} else {
 			orderButton.disabled = true;

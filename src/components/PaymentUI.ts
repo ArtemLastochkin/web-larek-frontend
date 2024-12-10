@@ -34,6 +34,7 @@ export class PaymentUI extends FormUI implements IPayment {
 				otherButton: this.cashButton,
 				errorElement: this.errorElement,
 				orderButton: this.orderButton,
+				methodSetText: this.setText
 			});
 		});
 
@@ -45,6 +46,7 @@ export class PaymentUI extends FormUI implements IPayment {
 				otherButton: this.cardButton,
 				errorElement: this.errorElement,
 				orderButton: this.orderButton,
+				methodSetText: this.setText
 			});
 		});
 
@@ -54,6 +56,7 @@ export class PaymentUI extends FormUI implements IPayment {
 				input: evtTarget,
 				errorElement: this.errorElement,
 				orderButton: this.orderButton,
+				methodSetText: this.setText
 			});
 		});
 

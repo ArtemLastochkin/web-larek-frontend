@@ -27,6 +27,7 @@ export class ContactUI extends FormUI implements IContactUI {
 				form: form,
 				orderButton: this.orderButton,
 				errorElement: this.errorElement,
+				methodSetText: this.setText
 			});
 		});
 
