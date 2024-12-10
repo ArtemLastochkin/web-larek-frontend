@@ -264,6 +264,10 @@ yarn build
 
 - buttonInBasketElement: HTMLButtonElement - HTML элемент кнопка - "добавить в корзину"
 
+Метода класса:
+
+- changeActivityButtonInBasket(value: boolean): void - метод изменяет значение Disabled у кнопки "в корзину"
+
 6. Класс CardBasketUI  
    Компонент отвечает за создание карточки для корзины и соответствует интерфейсу ICardBasketUI. Конструктор класса принимает шаблон элемента карточки и брокер событий. В конструкторе инициализируются поля itemIndexElement и itemDeleteButton и вешается слушатель на кнопку "удалить карточку из корзины". В коллбэке слушателя вызывается событие "удалить карточку из корзины" с передачей в него объекта по типу { id: value }, в качестве значения value передается значение поля idCard родителя. При вызове медода render у данного класса, дополнительно передается объект с полем itemIndex.  
    Экземпляр класса создается при возникновении события "изменение списка корзины", для каждого объекта карточки полученного из метода getProductList класса basketModel.
@@ -435,7 +439,14 @@ itemIndex: string;
 }
 ```
 
-8. Интерфейс описывает класс BasketUI
+8. Интерфейс описывает класс CardFullUI
+```
+interface ICardFullUI extends Card {
+changeActivityButtonInBasket(value: boolean): void; - метод добавляет или убирает Disabled на кнопку "добавить в корзину"
+}
+```
+
+9. Интерфейс описывает класс BasketUI
 ```
 interface IBasketUI {
 totalPrice: string;
@@ -444,14 +455,14 @@ basketItems: HTMLElement[];
 }
 ```
 
-9. Интерфейс описывает класс PaymentUI
+10. Интерфейс описывает класс PaymentUI
 ```
 interface IPayment {
 address: InputSettings
 }
 ```
 
-10. Интерфейс описывает класс ContactUI
+11. Интерфейс описывает класс ContactUI
 ```
 interface IContactUI {
 email: InputSettings,
@@ -459,7 +470,7 @@ tel: InputSettings
 }
 ```
 
-11. Тип описывает объект настроек для инпутов 
+12. Тип описывает объект настроек для инпутов 
 ```
 type InputSettings = {
 required: boolean; - Значение атрибута required
@@ -469,7 +480,7 @@ pattern: string; - Регулярное выражение
 };
 ```
 
-12. Тип описывает настройки для инпутов
+13. Тип описывает настройки для инпутов
 ```
 type InputSetting = {
 address: Partial<InputSettings>; - Настройки для инпута адреса 
@@ -478,14 +489,14 @@ email: Partial<InputSettings>; - Настройки для инпута email
 };
 ```
 
-13. Интерфейс описывает класс Success
+14. Интерфейс описывает класс Success
 ```
 interface Success {
 total: number;
 }
 ```
 
-14. Тип описывает объект полученный от сервера после отправки данных пользователя
+15. Тип описывает объект полученный от сервера после отправки данных пользователя
 ```
 type ResponseApiPost = Success & { id: Pick<Card, `id`> };
 ```

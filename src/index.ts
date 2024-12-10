@@ -55,14 +55,17 @@ eventEmitter.on(`loaded:page`, () => {
 });
 
 // клик по карточке
-eventEmitter.on<Pick<Card, `id`>>(`card:click`, ({ id }) => {
+eventEmitter.on<{ id: string }>(`card:click`, ({ id }) => {
 	const cardExample = new CardFullUI(
 		cloneTemplate(settings.templateCardPreview),
 		eventEmitter
 	);
 	const dataCard = cardModel.getDataCard(id);
-	const elementCard = cardExample.render(dataCard);
-	popup.setContent(elementCard);
+	if (dataCard.price === null) {
+		cardExample.changeActivityButtonInBasket(true);
+	}
+	const cardElement = cardExample.render(dataCard);
+	popup.setContent(cardElement);
 	popup.openPopup();
 });
 
@@ -159,12 +162,10 @@ eventEmitter.on<{
 	otherButton: HTMLButtonElement;
 	errorElement: HTMLElement;
 	orderButton: HTMLButtonElement;
-	method: Function
 }>(
 	`payment:click`,
-	({ payment, buttonClick, otherButton, errorElement, orderButton, method }) => {
+	({ payment, buttonClick, otherButton, errorElement, orderButton }) => {
 		userDataModel.setPayment(payment);
-		method(errorElement, `Привет`)
 		if (
 			payment === settings.onlinePayment ||
 			payment === settings.offlinePayment
@@ -234,7 +235,7 @@ eventEmitter.on<{
 	}
 });
 
-// событий sumbit контактов
+// событие sumbit контактов
 eventEmitter.on<{ evt: Event }>(`contact:submit`, ({ evt }) => {
 	evt.preventDefault();
 	api

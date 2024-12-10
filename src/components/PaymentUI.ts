@@ -45,7 +45,6 @@ export class PaymentUI extends FormUI implements IPayment {
 				otherButton: this.cardButton,
 				errorElement: this.errorElement,
 				orderButton: this.orderButton,
-				method: this.setText
 			});
 		});
 
