@@ -1,5 +1,5 @@
 import { ICardBasketUI } from '../types';
-import { settings } from '../utils/constants';
+import { EventsName, settings } from '../utils/constants';
 import { ensureElement } from '../utils/utils';
 import { IEvents } from './base/events';
 import { CardUI } from './CardUI';
@@ -21,7 +21,7 @@ export class CardBasketUI extends CardUI implements ICardBasketUI {
 		) as HTMLButtonElement;
 
 		this.itemDeleteButton.addEventListener(`click`, () => {
-			events.emit(`card:delItemBasket`, { id: this.idCard });
+			events.emit(EventsName.DeleteItemBasket, { id: this.idCard });
 		});
 	}
 

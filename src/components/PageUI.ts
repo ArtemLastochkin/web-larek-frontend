@@ -1,5 +1,5 @@
 import { IPageUI } from '../types';
-import { settings } from '../utils/constants';
+import { EventsName, settings } from '../utils/constants';
 import { ensureElement } from '../utils/utils';
 import { Component } from './base/Component';
 import { IEvents } from './base/events';
@@ -26,7 +26,7 @@ export class PageUI extends Component<IPageUI> implements IPageUI {
 		) as HTMLButtonElement;
 
 		this.headerBasketButton.addEventListener(`click`, () => {
-			event.emit(`headerBasketButton:click`);
+			event.emit(EventsName.ClickIconBasket);
 		});
 	}
 

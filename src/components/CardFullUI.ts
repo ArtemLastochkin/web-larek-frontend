@@ -1,5 +1,5 @@
 import { ICardFullUI } from '../types';
-import { settings } from '../utils/constants';
+import { EventsName, settings } from '../utils/constants';
 import { ensureElement } from '../utils/utils';
 import { IEvents } from './base/events';
 import { CardPageUI } from './CardPageUI';
@@ -20,7 +20,7 @@ export class CardFullUI extends CardPageUI implements ICardFullUI {
 		) as HTMLButtonElement;
 
 		this.buttonInBasketElement.addEventListener(`click`, () => {
-			events.emit(`card:clickAddBasket`, { id: this.idCard });
+			events.emit(EventsName.AddCardBasket, { id: this.idCard });
 		});
 	}
 

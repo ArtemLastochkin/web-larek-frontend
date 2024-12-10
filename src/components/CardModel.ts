@@ -1,4 +1,5 @@
 import { Card, ICard } from '../types';
+import { EventsName } from '../utils/constants';
 import { ApiListResponse } from './base/api';
 import { IEvents } from './base/events';
 
@@ -25,7 +26,7 @@ export class CardModel implements ICard {
 	setData(res: ApiListResponse<Card>) {
 		this.cards = res.items;
 		this.total = res.total;
-		this.eventEmitter.emit(`loaded:page`);
-		this.eventEmitter.emit(`basket:changeList`);
+		this.eventEmitter.emit(EventsName.LoadPage);
+		this.eventEmitter.emit(EventsName.ChangeBasket);
 	}
 }

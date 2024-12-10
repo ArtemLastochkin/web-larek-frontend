@@ -4,7 +4,7 @@ import { BasketModel } from './components/BasketModel';
 import { CardModel } from './components/CardModel';
 import './scss/styles.scss';
 import { Card, ResponseApiPost } from './types';
-import { API_URL, settings } from './utils/constants';
+import { API_URL, EventsName, settings } from './utils/constants';
 import { cloneTemplate, ensureElement } from './utils/utils';
 import { Popup } from './components/Popup';
 import { PageUI } from './components/PageUI';
@@ -45,7 +45,7 @@ api
 
 // =================обработчики событий=================
 // загрузка карточек страницы
-eventEmitter.on(`loaded:page`, () => {
+eventEmitter.on(EventsName.LoadPage, () => {
 	cardModel.getDataAllCards().forEach((objCard) => {
 		const card = new CardPageUI(cloneTemplate(cardTemplate), eventEmitter);
 		const element = card.render(objCard);
@@ -55,7 +55,7 @@ eventEmitter.on(`loaded:page`, () => {
 });
 
 // клик по карточке
-eventEmitter.on<{ id: string }>(`card:click`, ({ id }) => {
+eventEmitter.on<{ id: string }>(EventsName.CardClick, ({ id }) => {
 	const cardExample = new CardFullUI(
 		cloneTemplate(settings.templateCardPreview),
 		eventEmitter
@@ -70,19 +70,19 @@ eventEmitter.on<{ id: string }>(`card:click`, ({ id }) => {
 });
 
 // клик по крестику или оверлей попапа
-eventEmitter.on(`popup:close`, () => {
+eventEmitter.on(EventsName.PopupClose, () => {
 	popup.closePopup();
 	popup.clearContentPopup();
 });
 
 // клик по кнопке "добавить в корзину"
-eventEmitter.on<{ id: string }>(`card:clickAddBasket`, ({ id }) => {
+eventEmitter.on<{ id: string }>(EventsName.AddCardBasket, ({ id }) => {
 	const dataCard = cardModel.getDataCard(id);
 	basketModel.addProduct(dataCard);
 });
 
 // изменение списка корзины
-eventEmitter.on(`basket:changeList`, () => {
+eventEmitter.on(EventsName.ChangeBasket, () => {
 	page.render({ basketCounter: basketModel.totalItems });
 	const itemsBasketBoolean = basketModel.checkItems();
 	basketUI.render({ itemsBasketBoolean });
@@ -101,7 +101,7 @@ eventEmitter.on(`basket:changeList`, () => {
 });
 
 // клик по кнопке удаления элемента в корзине
-eventEmitter.on<{ id: string }>(`card:delItemBasket`, ({ id }) => {
+eventEmitter.on<{ id: string }>(EventsName.DeleteItemBasket, ({ id }) => {
 	basketModel.delProduct(id);
 	const basketItems = basketModel.elements;
 	basketUI.render({
@@ -111,7 +111,7 @@ eventEmitter.on<{ id: string }>(`card:delItemBasket`, ({ id }) => {
 });
 
 // клик по корзине
-eventEmitter.on(`headerBasketButton:click`, () => {
+eventEmitter.on(EventsName.ClickIconBasket, () => {
 	const basketItems = basketModel.elements;
 	const elementsBasket = basketUI.render({
 		totalPrice: basketModel.total,
@@ -122,8 +122,8 @@ eventEmitter.on(`headerBasketButton:click`, () => {
 	userDataModel.clearProperty();
 });
 
-// // клик по кнопке оформить в корзине
-eventEmitter.on(`basket:sendList`, () => {
+// клик по кнопке оформить в корзине
+eventEmitter.on(EventsName.SendBasketList, () => {
 	const items = basketModel.getProductList().map((element) => {
 		return element.id;
 	});
@@ -136,7 +136,7 @@ eventEmitter.on(`basket:sendList`, () => {
 	popup.setContent(paymentExample.render(settings.inputSetting));
 });
 
-// // событие ввода адреса в форме оплаты
+// событие ввода адреса в форме оплаты
 eventEmitter.on<{
 	input: HTMLInputElement;
 	errorElement: HTMLElement;
@@ -144,7 +144,7 @@ eventEmitter.on<{
 	methodSetText(element: HTMLElement, value: unknown): void;
 	methodSetDisabled(element: HTMLElement, state: boolean): void;
 }>(
-	`order.address:change`,
+	EventsName.AddressChange,
 	({ input, errorElement, submitButton, methodSetText, methodSetDisabled }) => {
 		userDataModel.setAddress(input.value);
 		if (!input.validity.valid) {
@@ -160,7 +160,7 @@ eventEmitter.on<{
 	}
 );
 
-// // событие выбор оплаты
+// событие выбор оплаты
 eventEmitter.on<{
 	payment: string;
 	buttonClick: HTMLButtonElement;
@@ -170,7 +170,7 @@ eventEmitter.on<{
 	methodSetText(element: HTMLElement, value: unknown): void;
 	methodSetDisabled(element: HTMLElement, state: boolean): void;
 }>(
-	`payment:click`,
+	EventsName.PaymentSelection,
 	({
 		payment,
 		buttonClick,
@@ -198,8 +198,8 @@ eventEmitter.on<{
 	}
 );
 
-// // событие отправки формы оплаты
-eventEmitter.on(`order:submit`, () => {
+// событие отправки формы оплаты
+eventEmitter.on(EventsName.PaymentSubmit, () => {
 	const contactExample = new ContactUI(
 		cloneTemplate(settings.templateContacts),
 		eventEmitter
@@ -207,7 +207,7 @@ eventEmitter.on(`order:submit`, () => {
 	popup.setContent(contactExample.render(settings.inputSetting));
 });
 
-// // событие ввода email
+// событие ввода email
 eventEmitter.on<{
 	form: HTMLFormElement;
 	input: HTMLInputElement;
@@ -216,7 +216,7 @@ eventEmitter.on<{
 	methodSetText(element: HTMLElement, value: unknown): void;
 	methodSetDisabled(element: HTMLElement, state: boolean): void;
 }>(
-	`contacts.email:change`,
+	EventsName.EmailChange,
 	({
 		form,
 		input,
@@ -248,7 +248,7 @@ eventEmitter.on<{
 	methodSetText(element: HTMLElement, value: unknown): void;
 	methodSetDisabled(element: HTMLElement, state: boolean): void;
 }>(
-	`contacts.phone:change`,
+	EventsName.PhoneChange,
 	({
 		form,
 		input,
@@ -278,7 +278,7 @@ eventEmitter.on<{
 );
 
 // событие sumbit контактов
-eventEmitter.on(`contacts:submit`, () => {
+eventEmitter.on(EventsName.ContactsSubmit, () => {
 	api
 		.post(settings.orderApi, userDataModel)
 		.then((res: ResponseApiPost) => {

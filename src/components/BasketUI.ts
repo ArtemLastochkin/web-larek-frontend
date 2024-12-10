@@ -1,5 +1,5 @@
 import { IBasketUI } from '../types';
-import { settings } from '../utils/constants';
+import { EventsName, settings } from '../utils/constants';
 import { ensureElement } from '../utils/utils';
 import { Component } from './base/Component';
 import { IEvents } from './base/events';
@@ -22,7 +22,7 @@ export class BasketUI extends Component<IBasketUI> implements IBasketUI {
 		this.basketList = ensureElement(settings.basketList, this.container);
 
 		this.basketButton.addEventListener(`click`, () => {
-			event.emit(`basket:sendList`);
+			event.emit(EventsName.SendBasketList);
 		});
 	}
 

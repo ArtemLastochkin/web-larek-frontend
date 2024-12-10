@@ -1,4 +1,5 @@
 import { Card, IBasketModel } from '../types';
+import { EventsName } from '../utils/constants';
 import { IEvents } from './base/events';
 
 export class BasketModel implements IBasketModel {
@@ -11,12 +12,12 @@ export class BasketModel implements IBasketModel {
 		if (!this.cardList.includes(obj)) {
 			this.cardList.push(obj);
 		}
-		this.events.emit(`basket:changeList`);
+		this.events.emit(EventsName.ChangeBasket);
 	}
 
 	delProduct(id: string) {
 		this.cardList = this.cardList.filter((number) => number.id !== id);
-		this.events.emit(`basket:changeList`);
+		this.events.emit(EventsName.ChangeBasket);
 	}
 
 	getProductList(): Card[] {
@@ -34,7 +35,7 @@ export class BasketModel implements IBasketModel {
 	clear() {
 		this.cardList = [];
 		this.cardElements = [];
-		this.events.emit(`basket:changeList`);
+		this.events.emit(EventsName.ChangeBasket);
 	}
 
 	get total(): string {

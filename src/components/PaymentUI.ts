@@ -1,5 +1,5 @@
 import { InputSettings, IPayment } from '../types';
-import { settings } from '../utils/constants';
+import { EventsName, settings } from '../utils/constants';
 import { ensureElement } from '../utils/utils';
 import { IEvents } from './base/events';
 import { FormUI } from './FormUI';
@@ -28,7 +28,7 @@ export class PaymentUI extends FormUI implements IPayment {
 
 		this.cardButton.addEventListener(`click`, (evt: Event) => {
 			const evtTarget = evt.target as HTMLButtonElement;
-			event.emit(`payment:click`, {
+			event.emit(EventsName.PaymentSelection, {
 				payment: settings.onlinePayment,
 				buttonClick: evtTarget,
 				otherButton: this.cashButton,
@@ -41,7 +41,7 @@ export class PaymentUI extends FormUI implements IPayment {
 
 		this.cashButton.addEventListener(`click`, (evt: Event) => {
 			const evtTarget = evt.target as HTMLButtonElement;
-			event.emit(`payment:click`, {
+			event.emit(EventsName.PaymentSelection, {
 				payment: settings.offlinePayment,
 				buttonClick: evtTarget,
 				otherButton: this.cardButton,

@@ -1,14 +1,16 @@
 import { IPopup } from '../types';
-import { settings } from '../utils/constants';
+import { EventsName, settings } from '../utils/constants';
 import { ensureElement } from '../utils/utils';
+import { Component } from './base/Component';
 import { IEvents } from './base/events';
 
-export class Popup implements IPopup {
+export class Popup extends Component<object> implements IPopup {
 	protected modalContent: HTMLElement;
 	protected modalContainer: HTMLElement;
 	protected modalCloseButton: HTMLButtonElement;
 
 	constructor(modalContainer: HTMLElement, eventEmitter: IEvents) {
+		super(modalContainer)
 		this.modalContainer = modalContainer;
 		this.modalContent = ensureElement(
 			settings.modalContent,
@@ -20,13 +22,13 @@ export class Popup implements IPopup {
 		) as HTMLButtonElement;
 
 		this.modalCloseButton.addEventListener(`click`, () => {
-			eventEmitter.emit(`popup:close`);
+			eventEmitter.emit(EventsName.PopupClose);
 		});
 
 		this.modalContainer.addEventListener(`click`, (evt: Event) => {
 			const evtTarget = evt.target as HTMLElement;
 			if (evtTarget.classList.contains(settings.modalActiveClass)) {
-				eventEmitter.emit(`popup:close`);
+				eventEmitter.emit(EventsName.PopupClose);
 			}
 		});
 	}

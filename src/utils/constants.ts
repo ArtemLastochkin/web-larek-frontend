@@ -73,3 +73,23 @@ export const settings = {
 	templateOrder: `#order`,
 	templateContacts: `#contacts`,
 };
+
+/**
+* Названия событий
+*/
+export enum EventsName {
+	LoadPage = `loaded:page`,
+	CardClick = `card:click`,
+	PopupClose = `popup:close`,
+	AddCardBasket = `card:clickAddBasket`,
+	ChangeBasket = `basket:changeList`,
+	DeleteItemBasket = `card:delItemBasket`,
+	ClickIconBasket = `headerBasketButton:click`,
+	SendBasketList = `basket:sendList`,
+	AddressChange = `order.address:change`,
+	PaymentSelection = `payment:click`,
+	PaymentSubmit = `order:submit`,
+	EmailChange = `contacts.email:change`,
+	PhoneChange = `contacts.phone:change`,
+	ContactsSubmit = `contacts:submit`
+}

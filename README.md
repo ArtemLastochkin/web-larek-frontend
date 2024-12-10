@@ -501,6 +501,27 @@ total: number;
 type ResponseApiPost = Success & { id: Pick<Card, `id`> };
 ```
 
+16. Константы событий
+```
+enum EventsName {
+	LoadPage = `loaded:page`,
+	CardClick = `card:click`,
+	PopupClose = `popup:close`,
+	AddCardBasket = `card:clickAddBasket`,
+	ChangeBasket = `basket:changeList`,
+	DeleteItemBasket = `card:delItemBasket`,
+	ClickIconBasket = `headerBasketButton:click`,
+	SendBasketList = `basket:sendList`,
+	AddressChange = `order.address:change`,
+	PaymentSelection = `payment:click`,
+	PaymentSubmit = `order:submit`,
+	EmailChange = `contacts.email:change`,
+	PhoneChange = `contacts.phone:change`,
+	ContactsSubmit = `contacts:submit`
+}
+```
+
+
 ## Краткое описание приложения
 
 В приложении используется событийно-ориентированный метод написания кода. За основу архитектуры приложения взят паттерн MVP. В проекте вынесены в отдельные файлы, в папке component, сущности отвечающие за работу конкретных элементов приложения. Все файлы разделены на компоненты отображения и компоненты модели данных. Название файлов отражают принадлежность компонента к определнной группе.  
