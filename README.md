@@ -99,7 +99,7 @@ yarn build
 
 - handleResponse(response: Response): Promise<object> - метод обрабатывает ответ с сервера с помощью .json() и возвращает промис. В параметрах принимает объект типа Response.
 
-- get(uri: string) - метод возвращает результат fetch запроса GET отправленный по адресу baseUrl + uri где uri строка и обработанный с помощью handleResponse. В параметрах принимает агрумент строку.
+<!-- - get(uri: string) - метод возвращает результат fetch запроса GET отправленный по адресу baseUrl + uri где uri строка и обработанный с помощью handleResponse. В параметрах принимает агрумент строку. -->
 
 <!-- - post(uri: string, data: object, method: ApiPostMethods = 'POST') - метод возвращает результат fetch запроса методом ApiPostMethods, отправленный по адресу baseUrl + uri где uri строка, и обработанный с помощью handleResponse. На вход метод принимат uri - строка, data - объект с настройками, method - метод запроса, изначально инициализирован как строка 'POST' -->
 
