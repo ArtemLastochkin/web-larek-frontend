@@ -4,7 +4,7 @@ import { IEvents } from './base/events';
 import { CardUI } from './CardUI';
 
 export class CardPageUI extends CardUI {
-	constructor(container: HTMLElement, events: IEvents) {
+	constructor(container: HTMLTemplateElement, events: IEvents) {
 		super(container);
 		this.categoryElement = ensureElement(
 			settings.categorySelector,

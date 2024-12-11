@@ -10,14 +10,14 @@ export type Card = {
 };
 
 export interface IUserDataModel {
-	setIdItems(value: string[]): void
-	setPayment(value: string): void
-	setAddress(value: string): void
-	setPhone(value: string): void
-	setEmail(value: string): void
-	setTotal(value: string | number | null): void
-	checkPayment(): boolean
-	clearProperty(): void
+	setIdItems(value: string[]): void;
+	setPayment(value: string): void;
+	setAddress(value: string): void;
+	setPhone(value: string): void;
+	setEmail(value: string): void;
+	setTotal(value: string | number | null): void;
+	checkPayment(): boolean;
+	clearProperty(): void;
 }
 
 export interface ICard {
@@ -34,7 +34,7 @@ export interface IBasketModel {
 	delProduct(id: string): void;
 	getProductList(): Card[];
 	setElements(value: HTMLElement[]): void;
-	checkItems(): boolean
+	checkItems(): boolean;
 	clear(): void;
 	total: string;
 	totalItems: string;
@@ -59,7 +59,7 @@ export interface ICardBasketUI extends Card {
 }
 
 export interface ICardFullUI extends Card {
-	changeActivityButtonInBasket(value: boolean): void
+	changeActivityButtonInBasket(value: boolean): void;
 }
 
 export interface IBasketUI {
@@ -69,12 +69,12 @@ export interface IBasketUI {
 }
 
 export interface IPayment {
-	address: InputSettings
+	address: InputSettings;
 }
 
 export interface IContactUI {
-	email: InputSettings,
-	tel: InputSettings
+	email: InputSettings;
+	tel: InputSettings;
 }
 
 export type InputSettings = {

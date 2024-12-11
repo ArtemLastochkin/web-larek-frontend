@@ -34,7 +34,7 @@ export class PaymentUI extends FormUI implements IPayment {
 				otherButton: this.cashButton,
 				changeTextError: this.changeTextError,
 				methodToggleClass: this.toggleClass,
-				changeActivitySubmit: this.changeActivitySubmit
+				changeActivitySubmit: this.changeActivitySubmit,
 			});
 		});
 
@@ -46,7 +46,7 @@ export class PaymentUI extends FormUI implements IPayment {
 				otherButton: this.cardButton,
 				changeTextError: this.changeTextError,
 				methodToggleClass: this.toggleClass,
-				changeActivitySubmit: this.changeActivitySubmit
+				changeActivitySubmit: this.changeActivitySubmit,
 			});
 		});
 	}
