@@ -97,7 +97,7 @@ yarn build
 
 Методы класса:
 
-<!-- - handleResponse(response: Response): Promise<object> - метод обрабатывает ответ с сервера с помощью .json() и возвращает промис. В параметрах принимает объект типа Response. -->
+- handleResponse(response: Response): Promise<object> - метод обрабатывает ответ с сервера с помощью json и возвращает промис. В параметрах принимает объект типа Response.
 
 <!-- - get(uri: string) - метод возвращает результат fetch запроса GET отправленный по адресу baseUrl + uri где uri строка и обработанный с помощью handleResponse. В параметрах принимает агрумент строку. -->
 
