@@ -17,7 +17,7 @@ import { PaymentUI } from './components/PaymentUI';
 import { ContactUI } from './components/ContactUI';
 import { SuccessUI } from './components/SuccessUI';
 
-// =================константы=================
+// =================константы================
 const pageElement = ensureElement(settings.page) as HTMLBodyElement;
 const cardTemplate = ensureElement(
 	settings.templateCard
